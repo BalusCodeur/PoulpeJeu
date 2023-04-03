@@ -19,22 +19,19 @@ class MainActivity : ComponentActivity() {
             PoulpeJeuTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+
                 }
             }
         }
+
+        val button: Button = findViewById(R.id.button)
+
+        // Ajoutez un écouteur de clic pour le bouton
+        button.setOnClickListener {
+            // Créez une Intent pour ouvrir votre nouvelle page
+            val intent = Intent(this, ShoutGame::class.java)
+            startActivity(intent)
+        }
     }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    PoulpeJeuTheme {
-        Greeting("Android")
     }
 }
