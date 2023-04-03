@@ -1,6 +1,8 @@
 package com.example.poulpejeu
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Button
 import androidx.activity.ComponentActivity
@@ -12,9 +14,36 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.poulpejeu.ui.theme.PoulpeJeuTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val RECORD_AUDIO_PERMISSION_REQUEST_CODE = 1
+    // Demander l'autorisation à l'utilisateur
+    private fun requestRecordAudioPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO),
+                RECORD_AUDIO_PERMISSION_REQUEST_CODE)
+        }
+    }
+
+    // Gérer la réponse de l'utilisateur à la demande d'autorisation
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            RECORD_AUDIO_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // L'utilisateur a autorisé l'accès au microphone
+                } else {
+                    // L'utilisateur a refusé l'autorisation
+                }
+                return
+            }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.mainactivity_layout)
@@ -34,5 +63,6 @@ class MainActivity : ComponentActivity() {
             val intent = Intent(this, Quizz::class.java)
             startActivity(intent)
         }
+        requestRecordAudioPermission()
     }
 }
