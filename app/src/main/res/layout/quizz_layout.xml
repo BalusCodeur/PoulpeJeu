@@ -7,7 +7,32 @@
         android:id="@+id/question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PIPICACA">
-
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:text="Ici se pose la question"
+        android:textSize="30sp"
+        >
     </TextView>
+
+    <Button
+        android:id="@+id/repButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp">
+    </Button>
+    <Button
+        android:id="@+id/repButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp">
+    </Button>
+    <Button
+        android:id="@+id/repButton3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp">
+    </Button>
 </LinearLayout>
