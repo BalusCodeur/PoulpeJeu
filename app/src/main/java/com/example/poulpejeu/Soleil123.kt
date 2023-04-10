@@ -26,8 +26,6 @@ class Soleil123 : ComponentActivity() {
     private lateinit var fille: ImageView
     private lateinit var runner: ImageView
     private lateinit var tdm: ImageView
-    private lateinit var sensorManager: SensorManager
-    private lateinit var accelerometer: Sensor
     private lateinit var run : Button
     private lateinit var count : TextView
     private lateinit var score : TextView
@@ -111,7 +109,6 @@ class Soleil123 : ComponentActivity() {
             }
 
         }
-
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
             // Non utilisé ici
         }

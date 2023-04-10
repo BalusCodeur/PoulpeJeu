@@ -39,6 +39,11 @@
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
+        <activity
+            android:name=".Biscuit"
+            android:exported="true"
+            android:theme="@style/Theme.PoulpeJeu">
+        </activity>
 
     </application>
 
