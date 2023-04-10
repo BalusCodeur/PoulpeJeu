@@ -34,6 +34,11 @@
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
+        <activity
+            android:name=".Soleil123"
+            android:exported="true"
+            android:theme="@style/Theme.PoulpeJeu">
+        </activity>
 
     </application>
 

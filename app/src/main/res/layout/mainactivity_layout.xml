@@ -30,5 +30,13 @@
         android:layout_marginTop="20dp"
         android:text="C'EST L4HEURE DU QUIZZZZ">
     </Button>
+    <Button
+        android:id="@+id/soleilButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="mugunghwa kkotchi pieosseumnida">
+    </Button>
 
 </LinearLayout>
