@@ -44,6 +44,11 @@
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
+        <activity
+            android:name=".BridgeGame"
+            android:exported="true"
+            android:theme="@style/Theme.PoulpeJeu">
+        </activity>
 
     </application>
 

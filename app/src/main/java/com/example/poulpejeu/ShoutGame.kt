@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import com.example.poulpejeu.R
 import java.lang.Math.log10
 import android.util.Log
+import android.widget.Toast
 
 class ShoutGame : ComponentActivity(){
 
@@ -39,18 +40,18 @@ class ShoutGame : ComponentActivity(){
         }
 
         button.setOnClickListener {
-            Thread {
+            runOnUiThread {
                 var temp: Double;
                 // Créez une Intent pour ouvrir votre nouvelle page
                 for (i in 1..100) {
                     Thread.sleep(30)
-                    temp = getAmplitude();
+                    temp = getAmplitude()
                     if (volume < temp){
-                        volume = temp;
+                        volume = temp
                     }
                 }
-                Log.i("volume :", volume.toString())
-            }.start()
+                Toast.makeText(this, volume.toString() + " dB", Toast.LENGTH_LONG).show()
+            }
         }
     }
 }
