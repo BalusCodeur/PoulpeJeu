@@ -53,6 +53,7 @@ class MainActivity : ComponentActivity() {
         val buttonSoleil: Button = findViewById(R.id.soleilButton)
         val buttonBiscuit: Button = findViewById(R.id.biscuitButton)
         val buttonBridge: Button = findViewById(R.id.bridgeButton)
+        val buttonRope: Button = findViewById(R.id.ropeButton)
 
         // Ajoutez un écouteur de clic pour le bouton
         buttonShout.setOnClickListener {
@@ -80,6 +81,11 @@ class MainActivity : ComponentActivity() {
         buttonBridge.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
             val intent = Intent(this, BridgeGame::class.java)
+            startActivity(intent)
+        }
+        buttonRope.setOnClickListener {
+            // Créez une Intent pour ouvrir votre nouvelle page
+            val intent = Intent(this, RopeGame::class.java)
             startActivity(intent)
         }
         requestRecordAudioPermission()

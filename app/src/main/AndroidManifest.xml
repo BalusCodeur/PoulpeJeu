@@ -49,6 +49,12 @@
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
+        <activity
+            android:name=".RopeGame"
+            android:exported="true"
+            android:theme="@style/Theme.PoulpeJeu">
+        </activity>
+
 
     </application>
 
