@@ -1,49 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="123 Soleil"
-        android:textSize="20sp">
-    </TextView>
-    <ImageView
-        android:id="@+id/fille"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_gravity="center_horizontal"
-        ></ImageView>
-
-    <View
+    android:background="@drawable/sand"
+    >
+    <!-- Le contenu de votre mise en page ici -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="@android:color/holo_red_light"
-        android:layout_marginTop="20dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="123 Soleil"
+            android:textSize="20sp">
+        </TextView>
+        <ImageView
+            android:id="@+id/fille"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center_horizontal"
+            ></ImageView>
 
-    <ImageView
-        android:id="@+id/runner"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="400dp"
-        >
-    </ImageView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@android:color/holo_red_light"
+            android:layout_marginTop="20dp"/>
 
-    <Button
-        android:id="@+id/Run"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="RUN"
-        android:layout_gravity="center_horizontal"></Button>
-    <TextView
-        android:id="@+id/count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-       >
-    </TextView>
+        <ImageView
+            android:id="@+id/runner"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="400dp"
+            >
+        </ImageView>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/Run"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RUN"
+            android:layout_gravity="center_horizontal"></Button>
+        <TextView
+            android:id="@+id/count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+        </TextView>
+
+    </LinearLayout>
+</RelativeLayout>
+

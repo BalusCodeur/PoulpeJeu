@@ -7,9 +7,11 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.provider.MediaStore.Audio.Media
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -30,13 +32,16 @@ class Soleil123 : ComponentActivity() {
     private lateinit var count : TextView
     private lateinit var score : TextView
     val translationAnim = TranslateAnimation(0f, 0f, 0f, -40f) // déplace de 200 pixels vers le haut
-    private val counterInterval = 3000L // intervalle de comptage en ms
+    private val counterInterval = 500L // intervalle de comptage en ms
     private val countingPattern = arrayOf(10L, 10L, 10L, 10L) // temps de comptage et de pause en secondes
     private var currentCountIndex = -1 // index actuel dans le tableau de comptage
     private var isCounting = false // indique si le comptage est en cours
     private var counter = 0L
     private var start:Long = 0
     var end = false
+
+    private lateinit var sonTourne : MediaPlayer
+    private lateinit var sonCompte : MediaPlayer
 
 
     @SuppressLint("MissingInflatedId", "ResourceType")
@@ -57,9 +62,10 @@ class Soleil123 : ComponentActivity() {
         run = findViewById(R.id.Run)
 
 
+        sonCompte = MediaPlayer.create(this, R.raw.soleil123)
+        sonTourne = MediaPlayer.create(this, R.raw.tourne)
+        sonCompte.setOnCompletionListener { sonTourne.start() }
 
-
-        val animation = AnimationUtils.loadAnimation(this, R.anim.running_anim)
         translationAnim.duration = 10 // durée de l'animation en ms
 
 
@@ -120,51 +126,61 @@ class Soleil123 : ComponentActivity() {
     }
 
     private fun startNextCounting() {
-        if (currentCountIndex >= countingPattern.size) {
-            // Si on a atteint la fin du tableau, le joueur a perdu
-            Log.i("Fin","Fin du jeu")
-            setContentView(R.layout.soleil_dead_layout)
-            tdm = findViewById(R.id.tdm)
-            tdm.setImageResource(R.drawable.tdm)
-            return
+
+            if (currentCountIndex >= countingPattern.size) {
+                // Si on a atteint la fin du tableau, le joueur a perdu
+                Log.i("Fin", "Fin du jeu")
+                setContentView(R.layout.soleil_dead_layout)
+                tdm = findViewById(R.id.tdm)
+                tdm.setImageResource(R.drawable.tdm)
+                end = true
+                return
+            }
+
+            val countDuration = countingPattern[currentCountIndex] * 1000L
+            val pauseDuration = 3000L
+            count.setText("Pas pause")
+
+            // Démarre le CountDownTimer pour le comptage
+        if(!end){
+            object : CountDownTimer(countDuration, counterInterval) {
+                override fun onTick(millisUntilFinished: Long) {
+                    counter = millisUntilFinished / 1000L
+                    if (counter == 5L) {
+                        sonCompte.start()
+                    }
+                    Log.i("Temps", counter.toString())
+                }
+
+                override fun onFinish() {
+                    if(!end) {
+                        isCounting = !isCounting
+                        count.setText("Pause")
+                        // Démarre le CountDownTimer pour la pause
+                        object : CountDownTimer(pauseDuration, counterInterval) {
+                            override fun onTick(millisUntilFinished: Long) {
+                                counter = millisUntilFinished / 1000L
+                            }
+
+                            override fun onFinish() {
+
+                                currentCountIndex++
+
+                                isCounting = !isCounting
+                                sonTourne.start()
+                                startNextCounting()
+
+                            }
+                        }.start()
+                    }
+                }
+            }.start()}
         }
 
-        val countDuration = countingPattern[currentCountIndex] * 1000L
-        val pauseDuration = 3000L
-        count.setText("Pas pause")
-
-        // Démarre le CountDownTimer pour le comptage
-        object : CountDownTimer(countDuration, counterInterval) {
-            override fun onTick(millisUntilFinished: Long) {
-                counter = millisUntilFinished / 1000L
-                Log.i("Temps", counter.toString())
-            }
-
-            override fun onFinish() {
-                isCounting = !isCounting
-                count.setText("Pause")
-                // Démarre le CountDownTimer pour la pause
-                object : CountDownTimer(pauseDuration, counterInterval) {
-                    override fun onTick(millisUntilFinished: Long) {
-                        counter = millisUntilFinished / 1000L
-                    }
-
-                    override fun onFinish() {
-                        currentCountIndex++
-
-                        isCounting = !isCounting
-                        startNextCounting()
-                    }
-                }.start()
-            }
-        }.start()
-    }
-    fun victory(){
+    fun victory() {
         setContentView(R.layout.soleil_win_layout)
         score = findViewById(R.id.score)
-        score.text = ((System.currentTimeMillis()-start)/1000.0).toString()+" secondes"
+        score.text = ((System.currentTimeMillis() - start) / 1000.0).toString() + " secondes"
         end = true
     }
-
-
 }
