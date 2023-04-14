@@ -64,13 +64,6 @@ class Question(val question: String, var options: List<String>, val answer: Stri
                 listOf("178 Kcal", "354 Kcal", "465 Kcal"),
                 "354 Kcal"
             ),
-
-
-
-
-            // Ajouter d'autres questions ici
         )
     }
-
-
 }
