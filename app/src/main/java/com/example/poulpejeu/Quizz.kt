@@ -11,11 +11,12 @@ import androidx.activity.ComponentActivity
 class Quizz : ComponentActivity() {
 
     private lateinit var questionTextView: TextView
+    private lateinit var result: TextView
     private lateinit var button1: Button
     private lateinit var button2: Button
     private lateinit var button3: Button
 
-    private var questions = mutableListOf<Question>()
+    private var questions = listOf<Question>()
     private var currentQuestionIndex = 0
     private var score = 0
 
@@ -30,23 +31,7 @@ class Quizz : ComponentActivity() {
         button3 = findViewById(R.id.repButton3)
 
         // Initialize question list
-        questions = mutableListOf(
-            Question(
-                "Quel est le nom de la plus haute montagne du monde?",
-                listOf("Everest", "Kilimandjaro", "Mont Blanc"),
-                "Everest"
-            ),
-            Question(
-                "Dans quel pays se trouve la ville de Marrakech?",
-                listOf("Algérie", "Tunisie", "Maroc"),
-                "Maroc"
-            ),
-            Question(
-                "Quel est le plus grand pays du monde?",
-                listOf("Russie", "Chine", "États-Unis"),
-                "Russie"
-            )
-        )
+        questions  = Question.allQuestions.shuffled().take(5)
 
         // Shuffle options for each question
         questions.forEach { it.shuffleOptions() }
@@ -121,8 +106,11 @@ class Quizz : ComponentActivity() {
 
             fun showScore() {
             // Show score in a toast message
-            val message = "Votre score : $score/${questions.size}"
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+            val message = "$score/${questions.size}"
+            setContentView(R.layout.quizz_result_layout)
+            result = findViewById(R.id.score_quizz)
+            result.text=message
+
         }
 
             fun resetQuiz() {
