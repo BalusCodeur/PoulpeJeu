@@ -45,6 +45,9 @@ class ShoutGame : ComponentActivity(){
         var count: TextView = findViewById(R.id.count)
         count.isVisible = false
 
+        var result: TextView = findViewById(R.id.result)
+        result.isVisible = false
+
 
         fun getAmplitude(): Double {
             return 20 * kotlin.math.log10(mRecorder.maxAmplitude.toDouble())
@@ -52,7 +55,9 @@ class ShoutGame : ComponentActivity(){
 
         fun endGame(){
             progressBar.isVisible = false
-            count.text = "Volume atteint : " + ((volume * 100.0).roundToInt()/100.0).toString() + " dB"
+            count.isVisible = false
+            result.text = "Volume atteint : " + ((volume * 100.0).roundToInt()/100.0).toString() + " dB"
+            result.isVisible = true
         }
 
         fun startGame() {
@@ -60,7 +65,7 @@ class ShoutGame : ComponentActivity(){
             handler2.post(object : Runnable {
                 override fun run() {
 
-                    count.text = "Criez !"
+                    count.text = "CRIEZ"
 
                     var temp: Double
 
