@@ -4,4 +4,8 @@
         android:fontStyle="normal"
         android:fontWeight="400"
         android:src="@font/squidfont" />
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        android:src="@font/neonfont" />
 </font-family>
