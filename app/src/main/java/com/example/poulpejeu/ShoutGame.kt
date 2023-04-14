@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Handler
-import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -13,14 +12,18 @@ import com.example.poulpejeu.R
 import java.lang.Math.log10
 import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.*
+import androidx.core.view.isVisible
 import java.lang.Thread.sleep
+import kotlin.math.roundToInt
 
 class ShoutGame : ComponentActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.shoutgame_layout)
+
+        val title: ImageView = findViewById(R.id.shoutgame)
+        title.setImageResource(R.drawable.shoutgame)
 
 
         val mRecorder = MediaRecorder()
@@ -29,27 +32,39 @@ class ShoutGame : ComponentActivity(){
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
         mRecorder.setOutputFile("/dev/null")
         mRecorder.prepare()
-        mRecorder.start()
 
 
         val button: Button = findViewById(R.id.button)
-        var volume: Double = 0.0;
+        var volume = 0.0;
 
         val progressBar: ProgressBar = findViewById(R.id.progress_bar)
         progressBar.max = 100
         progressBar.progress = 0
+        progressBar.isVisible = false
+
+        var count: TextView = findViewById(R.id.count)
+        count.isVisible = false
+
 
         fun getAmplitude(): Double {
             return 20 * kotlin.math.log10(mRecorder.maxAmplitude.toDouble())
         }
 
-        button.setOnClickListener {
+        fun endGame(){
+            progressBar.isVisible = false
+            count.text = "Volume atteint : " + ((volume * 100.0).roundToInt()/100.0).toString() + " dB"
+        }
 
-            val handler = Handler()
-            handler.post(object : Runnable {
+        fun startGame() {
+            val handler2 = Handler()
+            handler2.post(object : Runnable {
                 override fun run() {
+
+                    count.text = "Criez !"
+
                     var temp: Double
-                    // Mettre à jour la barre de progression
+
+                    progressBar.isVisible = true
 
                     if (progressBar.progress < 100) {
                         progressBar.progress += 1
@@ -58,14 +73,31 @@ class ShoutGame : ComponentActivity(){
                         if (volume < temp) {
                             volume = temp
                         }
-                        handler.postDelayed(this, 30)
+                        handler2.postDelayed(this, 30)
                     }
                     else {
-                        Toast.makeText(this@ShoutGame, volume.toString() + " dB", Toast.LENGTH_LONG).show()
+                        endGame()
                         mRecorder.stop()
                     }
                 }
             })
+        }
+
+        fun startCountdown(seconds: Int) {
+            count.text = seconds.toString()
+            if (seconds > 0) {
+                Handler().postDelayed({ startCountdown(seconds - 1) }, 1000)
+            } else {
+                startGame()
+            }
+        }
+
+
+        button.setOnClickListener {
+            mRecorder.start()
+            button.isVisible = false
+            count.isVisible = true
+            startCountdown(3)
         }
     }
 }
