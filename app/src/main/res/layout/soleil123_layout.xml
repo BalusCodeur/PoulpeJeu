@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/sand"
     >
-    <!-- Le contenu de votre mise en page ici -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,13 +21,11 @@
             android:layout_height="70dp"
             android:layout_gravity="center_horizontal"
             ></ImageView>
-
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:background="@android:color/holo_red_light"
             android:layout_marginTop="20dp"/>
-
         <ImageView
             android:id="@+id/runner"
             android:layout_width="70dp"
@@ -37,7 +34,6 @@
             android:layout_marginTop="400dp"
             >
         </ImageView>
-
         <Button
             android:id="@+id/Run"
             android:layout_width="wrap_content"

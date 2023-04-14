@@ -9,7 +9,8 @@
         android:layout_marginTop="40dp"
         android:layout_gravity="center_horizontal"
         android:text="Votre score"
-        android:textSize="40sp">
+        android:textSize="40sp"
+        android:fontFamily="@font/squidfont">
     </TextView>
     <TextView
         android:id="@+id/score_quizz"
@@ -17,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textSize="40sp"
-        android:text="/5">
+        android:fontFamily="@font/squidfont">
 
     </TextView>
 

@@ -15,7 +15,7 @@ class Question(val question: String, var options: List<String>, val answer: Stri
                 "La Finlande"
             ),
             Question(
-                "Quel est l'aliment le plus volé ?",
+                "Quel est l'aliment le plus vole ?",
                 listOf("Le fromage", "La trotinette", "Les chips"),
                 "Le fromage"
             ),
@@ -40,17 +40,12 @@ class Question(val question: String, var options: List<String>, val answer: Stri
                 "Molle"
             ),
             Question(
-                "Le camembert est un formage à pate ... ?",
-                listOf("Persillée", "Pressée non cuite", "Molle"),
-                "Molle"
-            ),
-            Question(
                 "Quelle est l'origine de l'emmental ?",
                 listOf("Italie", "France", "Suisse"),
                 "Suisse"
             ),
             Question(
-                "D'où provient le Trappiste ?",
+                "D'ou provient le Trappiste ?",
                 listOf("Bretagne", "Savoie", "Nord-Pas de Calais"),
                 "Nord-Pas de Calais"
             ),

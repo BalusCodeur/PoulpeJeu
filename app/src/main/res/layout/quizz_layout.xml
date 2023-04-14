@@ -12,6 +12,7 @@
         android:layout_marginHorizontal="10dp"
         android:lines="3"
         android:textSize="20sp"
+        android:fontFamily="@font/squidfont"
         >
     </TextView>
 
@@ -20,20 +21,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/squidfont">
     </Button>
     <Button
         android:id="@+id/repButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/squidfont">
     </Button>
     <Button
         android:id="@+id/repButton3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/squidfont">
     </Button>
 </LinearLayout>

@@ -3,6 +3,7 @@ package com.example.poulpejeu
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -51,45 +52,53 @@ class MainActivity : ComponentActivity() {
 
         val title: ImageView = findViewById(R.id.poulpejeu)
         title.setImageResource(R.drawable.poulpejeu)
-
+        val bandeSon = MediaPlayer.create(this,R.raw.bandeson)
         val buttonShout: Button = findViewById(R.id.shoutButton)
         val buttonQuizz: Button = findViewById(R.id.quizzButton)
         val buttonSoleil: Button = findViewById(R.id.soleilButton)
         val buttonBiscuit: Button = findViewById(R.id.biscuitButton)
         val buttonBridge: Button = findViewById(R.id.bridgeButton)
         val buttonRope: Button = findViewById(R.id.ropeButton)
+        bandeSon.setOnCompletionListener { bandeSon.start() }
 
+        bandeSon.start()
         // Ajoutez un écouteur de clic pour le bouton
         buttonShout.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
             val intent = Intent(this, ShoutGame::class.java)
+            bandeSon.stop()
             startActivity(intent)
         }
 
         buttonQuizz.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
             val intent = Intent(this, Quizz::class.java)
+            bandeSon.stop()
             startActivity(intent)
         }
 
         buttonSoleil.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
             val intent = Intent(this, Soleil123::class.java)
+            bandeSon.stop()
             startActivity(intent)
         }
         buttonBiscuit.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
             val intent = Intent(this, Biscuit::class.java)
+            bandeSon.stop()
             startActivity(intent)
         }
         buttonBridge.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
             val intent = Intent(this, BridgeGame::class.java)
+            bandeSon.stop()
             startActivity(intent)
         }
         buttonRope.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
             val intent = Intent(this, RopeGame::class.java)
+            bandeSon.stop()
             startActivity(intent)
         }
         requestRecordAudioPermission()
