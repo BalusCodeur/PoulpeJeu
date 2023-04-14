@@ -9,8 +9,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="40dp"
-        android:text="Ici se pose la question"
-        android:textSize="30sp"
+        android:layout_marginHorizontal="10dp"
+        android:lines="3"
+        android:textSize="20sp"
         >
     </TextView>
 
