@@ -30,25 +30,24 @@ class BridgeGame : ComponentActivity() {
         myTextView.setText("dead : " + dead)
 
 
-    var tab = IntArray(9)
-for (i in 0..8) {
-    tab[i] = Math.random().roundToInt()
-}
+        var tab = IntArray(9)
+        for (i in 0..8) {
+            tab[i] = Math.random().roundToInt()
+        }
 // Tableau de données pour chaque ligne de boutons (1 = bouton correct, 0 = bouton incorrect)
         data = arrayOf(
-            booleanArrayOf(tab[0]==0, tab[0]==1),
-            booleanArrayOf(tab[1]==0, tab[1]==1),
-            booleanArrayOf(tab[2]==0, tab[2]==1),
-            booleanArrayOf(tab[3]==0, tab[3]==1),
-            booleanArrayOf(tab[4]==0, tab[4]==1),
-            booleanArrayOf(tab[5]==0, tab[5]==1),
-            booleanArrayOf(tab[6]==0, tab[6]==1),
-            booleanArrayOf(tab[7]==0, tab[7]==1),
-            booleanArrayOf(tab[8]==0, tab[8]==1),
+            booleanArrayOf(tab[0] == 0, tab[0] == 1),
+            booleanArrayOf(tab[1] == 0, tab[1] == 1),
+            booleanArrayOf(tab[2] == 0, tab[2] == 1),
+            booleanArrayOf(tab[3] == 0, tab[3] == 1),
+            booleanArrayOf(tab[4] == 0, tab[4] == 1),
+            booleanArrayOf(tab[5] == 0, tab[5] == 1),
+            booleanArrayOf(tab[6] == 0, tab[6] == 1),
+            booleanArrayOf(tab[7] == 0, tab[7] == 1),
+            booleanArrayOf(tab[8] == 0, tab[8] == 1),
 
             )
 
-        for (i in 0..8)
 
         buttons = arrayOf<Array<GlassButton>>(
             arrayOf(findViewById(R.id.button0_0), findViewById(R.id.button0_1)),
