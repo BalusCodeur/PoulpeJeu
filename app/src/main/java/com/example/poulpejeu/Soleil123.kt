@@ -10,19 +10,13 @@ import android.hardware.SensorManager
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
-import android.provider.MediaStore.Audio.Media
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
 import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import org.w3c.dom.Text
 
 class Soleil123 : ComponentActivity() {
     private lateinit var fille: ImageView
@@ -111,7 +105,7 @@ class Soleil123 : ComponentActivity() {
                 //val anim = AnimationUtils.loadAnimation(this, R.anim.running_anim)
                 //imageViewRunner.startAnimation(anim)
             }else if(runner.translationY <= -1260 && !end){
-                victory()
+                showScore()
             }
 
         }
@@ -177,11 +171,21 @@ class Soleil123 : ComponentActivity() {
             }.start()}
         }
 
-    fun victory() {
+    fun showScore() {
         val score = ((System.currentTimeMillis() - start) / 1000.0).toString() + " secondes"
-        val intent = Intent(this, Result::class.java)
-        intent.putExtra("score",score)
-        startActivity(intent)
+        val bundle = intent.extras
+        if(intent.getIntExtra("mode",0)==0) {
+            val intent = Intent(this, PracticeResult::class.java)
+            intent.putExtra("score", score)
+            startActivity(intent)
+        }else {
+            val intent = Intent(this,PlayResult::class.java)
+            intent.putExtra("score", score)
+            if (bundle != null) {
+                intent.putExtras(bundle)
+            }
+            startActivity(intent)
+        }
         end = true
     }
 }

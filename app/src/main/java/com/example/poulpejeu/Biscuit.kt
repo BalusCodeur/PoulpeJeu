@@ -15,7 +15,6 @@ import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.core.view.isVisible
 import java.util.concurrent.TimeUnit
-import kotlin.concurrent.timer
 import kotlin.math.*
 import kotlin.random.Random
 
@@ -110,14 +109,26 @@ class Biscuit: ComponentActivity() {
         timeElapsed +=2000
     }
 
-    fun victory(){
+    fun showScore(){
         val score = (timeElapsed/1000).toString()+","+ (timeElapsed%1000) + "s"
-        val intent = Intent(this, Result::class.java)
-        intent.putExtra("score",score)
-        startActivity(intent)
-    }
+        val bundle = intent.extras
+        if(intent.getIntExtra("mode",0)==0) {
+            val intent = Intent(this, PracticeResult::class.java)
+            intent.putExtra("score", score)
+            startActivity(intent)
+        }else {
+            val intent = Intent(this,PlayResult::class.java)
+            intent.putExtra("score", score)
+            if (bundle != null) {
+                intent.putExtras(bundle)
+            }
+            startActivity(intent)
 
+        }
+        finish()
+    }
 }
+
 
 
 class CircleView(context: Context) : View(context) {
@@ -162,7 +173,7 @@ class CircleView(context: Context) : View(context) {
         val y = event.y
         val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
         if(isCircle(points)){
-            biscuitActivity.victory()
+            biscuitActivity.showScore()
         }
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -327,7 +338,7 @@ class SquareView(context: Context?) : View(context) {
     }
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if(isSquare(points)){
-            biscuitActivity.victory()
+            biscuitActivity.showScore()
         }
         val x = event.x
         val y = event.y
@@ -507,7 +518,7 @@ class StarView(context: Context?) : View(context) {
     }
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if(isStar(points)){
-            biscuitActivity.victory()
+            biscuitActivity.showScore()
         }
         val x = event.x
         val y = event.y

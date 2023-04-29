@@ -70,6 +70,7 @@ class ShoutGame : ComponentActivity(){
                     var temp: Double
 
                     progressBar.isVisible = true
+
                     if (progressBar.progress < 100) {
                         progressBar.progress += 1
 

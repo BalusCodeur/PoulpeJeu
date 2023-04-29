@@ -3,6 +3,7 @@ package com.example.poulpejeu
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -19,6 +20,7 @@ class Quizz : ComponentActivity() {
     private var questions = listOf<Question>()
     private var currentQuestionIndex = 0
     private var score = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,10 +108,21 @@ class Quizz : ComponentActivity() {
 
             fun showScore() {
             // Show score in a toast message
+            val bundle = intent.extras
             val score = "$score/${questions.size}";
-                val intent = Intent(this, Result::class.java)
-                intent.putExtra("score",score)
+            if(intent.getIntExtra("mode",0)==0) {
+                val intent = Intent(this, PracticeResult::class.java)
+                intent.putExtra("score", score)
                 startActivity(intent)
+            }else {
+                val intent = Intent(this,PlayResult::class.java)
+                intent.putExtra("score", score)
+                if (bundle != null) {
+                    intent.putExtras(bundle)
+                }
+                startActivity(intent)
+            }
+                finish()
         }
 
             fun resetQuiz() {

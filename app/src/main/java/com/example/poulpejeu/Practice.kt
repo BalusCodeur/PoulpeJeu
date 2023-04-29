@@ -44,38 +44,46 @@ class Practice : ComponentActivity() {
         buttonShout.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
             val intent = Intent(this, ShoutGame::class.java)
+            intent.putExtra("mode",1)
             startActivity(intent)
         }
 
         buttonQuizz.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
             val intent = Intent(this, Quizz::class.java)
+            intent.putExtra("mode",0)
             startActivity(intent)
         }
 
         buttonSoleil.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
             val intent = Intent(this, Soleil123::class.java)
+            intent.putExtra("mode",0)
             startActivity(intent)
+            finish()
         }
         buttonBiscuit.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
             val intent = Intent(this, Biscuit::class.java)
+            intent.putExtra("mode",0)
             startActivity(intent)
         }
         buttonBridge.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
             val intent = Intent(this, BridgeGame::class.java)
+            intent.putExtra("mode",0)
             startActivity(intent)
         }
         buttonRope.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
             val intent = Intent(this, RopeGame::class.java)
+            intent.putExtra("mode",0)
             startActivity(intent)
         }
         buttonP2P.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
             val intent = Intent(this, WifiDirectActivity::class.java)
+            intent.putExtra("mode",0)
             startActivity(intent)
         }
     }

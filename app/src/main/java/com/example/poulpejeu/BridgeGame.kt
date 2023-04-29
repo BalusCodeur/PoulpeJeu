@@ -3,6 +3,7 @@ package com.example.poulpejeu
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -16,7 +17,7 @@ import kotlin.math.roundToInt
 
 class BridgeGame : ComponentActivity() {
     private var currentRow = 8
-    private var dead = 0
+    private var lives = 9
     private lateinit var data: Array<BooleanArray>
     private lateinit var myTextView: TextView
     private lateinit var buttons: Array<Array<GlassButton>>
@@ -27,7 +28,7 @@ class BridgeGame : ComponentActivity() {
         setContentView(R.layout.bridgegame_layout)
 
         myTextView = findViewById(R.id.dead)
-        myTextView.setText("dead : " + dead)
+        myTextView.setText("Lives : " + lives)
 
 
         var tab = IntArray(9)
@@ -84,7 +85,7 @@ class BridgeGame : ComponentActivity() {
             if (buttons[i][j].discover()) {
 
                 if (currentRow == 0) {
-                    finish()
+                    showScore()
                 } else {
 
                     buttons[i - 1][0].active()
@@ -94,8 +95,8 @@ class BridgeGame : ComponentActivity() {
                 }
 
             } else {
-                dead++;
-                myTextView.setText("dead : " + dead)
+                lives--;
+                myTextView.setText("Lives : " + lives)
                 reInit()
             }
         }
@@ -111,5 +112,24 @@ class BridgeGame : ComponentActivity() {
                 buttons[i][1].reInit()
             }
         }
+    }
+
+    fun showScore() {
+        // Show score in a toast message
+        val bundle = intent.extras
+        val score = "$lives vies";
+        if(intent.getIntExtra("mode",0)==0) {
+            val intent = Intent(this, PracticeResult::class.java)
+            intent.putExtra("score", score)
+            startActivity(intent)
+        }else {
+            val intent = Intent(this,PlayResult::class.java)
+            intent.putExtra("score", score)
+            if (bundle != null) {
+                intent.putExtras(bundle)
+            }
+            startActivity(intent)
+        }
+        finish()
     }
 }

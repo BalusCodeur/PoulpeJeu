@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import androidx.activity.ComponentActivity
@@ -13,6 +14,23 @@ import androidx.core.content.ContextCompat
 import com.example.poulpejeu.P2P.WifiDirectActivity
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var title: ImageView
+    private lateinit var bandeSon: MediaPlayer
+    private lateinit var buttonPlay: Button
+    private lateinit var buttonPractice: Button
+
+    private val activityList = listOf(
+        ShoutGame::class.java,
+        Soleil123::class.java,
+        BridgeGame::class.java,
+        Biscuit::class.java,
+        RopeGame::class.java,
+        Quizz::class.java
+    )
+    private var currentIndex = 0
+
+
 
     private val RECORD_AUDIO_PERMISSION_REQUEST_CODE = 1
     // Demander l'autorisation à l'utilisateur
@@ -39,10 +57,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private lateinit var title: ImageView
-    private lateinit var bandeSon: MediaPlayer
-    private lateinit var buttonPlay: Button
-    private lateinit var buttonPractice: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +76,16 @@ class MainActivity : ComponentActivity() {
 
         buttonPlay.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
-
+            //val randomActivities = activityList.shuffled().take(3)
+            val randomActivities = listOf(Quizz::class.java,Biscuit::class.java,BridgeGame::class.java)
+            val bundle = Bundle()
+            bundle.putSerializable("randomActivities", ArrayList(randomActivities))
+            bundle.putInt("currentIndex", 0)
+            val intent = Intent(this, randomActivities[0])
+            intent.putExtra("mode",1)
+            Log.i("bundle",bundle.toString())
+            intent.putExtras(bundle)
+            startActivity(intent)
         }
 
         buttonPractice.setOnClickListener {
@@ -81,6 +104,12 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         bandeSon.start()
+    }
+
+    private fun startNextActivity(randomActivities: List<Class<*>>) {
+        val nextActivity = randomActivities[currentIndex]
+        val intent = Intent(this, nextActivity)
+        //startActivityForResult(intent, RESULT_CODE)
     }
 
 }

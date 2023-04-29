@@ -69,7 +69,12 @@
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
         <activity
-            android:name=".Result"
+            android:name=".PracticeResult"
+            android:exported="true"
+            android:theme="@style/Theme.PoulpeJeu">
+        </activity>
+        <activity
+            android:name=".PlayResult"
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>

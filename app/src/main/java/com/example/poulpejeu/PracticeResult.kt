@@ -5,9 +5,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import com.example.poulpejeu.P2P.WifiDirectActivity
 
-class Result : ComponentActivity() {
+class PracticeResult : ComponentActivity() {
     private lateinit var score:TextView
     private lateinit var back:Button
 
@@ -22,8 +21,9 @@ class Result : ComponentActivity() {
         score.text = scoreActivity
 
         back.setOnClickListener {
-            val intent = Intent(this, Practice::class.java)
-            startActivity(intent)
+            //val intent = Intent(this, Practice::class.java)
+            //startActivity(intent)
+            finish()
         }
     }
 }
