@@ -68,8 +68,11 @@
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
-
-
+        <activity
+            android:name=".Result"
+            android:exported="true"
+            android:theme="@style/Theme.PoulpeJeu">
+        </activity>
     </application>
 
 </manifest>

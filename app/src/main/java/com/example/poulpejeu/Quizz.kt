@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 
 
@@ -107,8 +106,8 @@ class Quizz : ComponentActivity() {
             fun showScore() {
             // Show score in a toast message
             val message = "$score/${questions.size}"
-            setContentView(R.layout.quizz_result_layout)
-            result = findViewById(R.id.score_quizz)
+            setContentView(R.layout.result_layout)
+            result = findViewById(R.id.score)
             result.text=message
 
         }
