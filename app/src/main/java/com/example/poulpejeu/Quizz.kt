@@ -1,5 +1,6 @@
 package com.example.poulpejeu
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
@@ -105,11 +106,10 @@ class Quizz : ComponentActivity() {
 
             fun showScore() {
             // Show score in a toast message
-            val message = "$score/${questions.size}"
-            setContentView(R.layout.result_layout)
-            result = findViewById(R.id.score)
-            result.text=message
-
+            val score = "$score/${questions.size}";
+                val intent = Intent(this, Result::class.java)
+                intent.putExtra("score",score)
+                startActivity(intent)
         }
 
             fun resetQuiz() {

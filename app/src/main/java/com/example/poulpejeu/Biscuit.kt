@@ -260,6 +260,7 @@ class CircleView(context: Context) : View(context) {
     }
 }
 class SquareView(context: Context?) : View(context) {
+    private lateinit var biscuitActivity: Biscuit
 
     private val smallSquareSize = 850f
     private val mediumSquareSize = 900f
@@ -325,6 +326,9 @@ class SquareView(context: Context?) : View(context) {
         }
     }
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        if(isSquare(points)){
+            biscuitActivity.victory()
+        }
         val x = event.x
         val y = event.y
         val smallSquareRect = RectF(smallSquareX, smallSquareY, smallSquareX + smallSquareSize, smallSquareY + smallSquareSize)
@@ -344,6 +348,7 @@ class SquareView(context: Context?) : View(context) {
                     if (smallSquareRect.contains(x, y)) {
                         // L'utilisateur touche l'intérieur du petit cercle
                         Log.i("caca", "Mort")
+                        biscuitActivity.penalty()
                     } else if (!largeSquareRect.contains(x, y)) {
                         Log.i("Menfou", "Menfou")
                     } else {
@@ -357,6 +362,7 @@ class SquareView(context: Context?) : View(context) {
                     if (smallSquareRect.contains(x, y)) {
                         // L'utilisateur touche l'intérieur du petit cercle
                         Log.i("caca", "Mort")
+                        biscuitActivity.penalty()
                     }
                 }
                 return true
@@ -377,6 +383,7 @@ class SquareView(context: Context?) : View(context) {
                     if (smallSquareRect.contains(x, y)) {
                         // L'utilisateur touche l'intérieur du petit cercle
                         Log.i("caca", "Mort")
+                        biscuitActivity.penalty()
                         trace=false
                     } else if (largeSquareRect.contains(x, y)) {
                         points.add(PointF(x, y))
@@ -409,8 +416,14 @@ class SquareView(context: Context?) : View(context) {
         Log.i("", sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2)).toString())
         return circumference - distance  < 0f && sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2))<30f
     }
+
+    fun setBiscuitActivity(activity: Biscuit) {
+        biscuitActivity = activity
+    }
 }
 class StarView(context: Context?) : View(context) {
+    private lateinit var biscuitActivity: Biscuit
+
     // Définir la taille des étoiles
     val largeStarSize =  1100f
     val mediumStarSize = 950f
@@ -493,6 +506,9 @@ class StarView(context: Context?) : View(context) {
         return path
     }
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        if(isStar(points)){
+            biscuitActivity.victory()
+        }
         val x = event.x
         val y = event.y
         val isInSmallStar = isPointInsideStar(x, y, smallPath)
@@ -511,6 +527,7 @@ class StarView(context: Context?) : View(context) {
                     if (isInSmallStar) {
                         // L'utilisateur touche l'intérieur du petit cercle
                         Log.i("caca", "Mort")
+                        biscuitActivity.penalty()
                     } else if (!isInBigStar) {
                         Log.i("Menfou", "Menfou")
                     } else {
@@ -524,6 +541,7 @@ class StarView(context: Context?) : View(context) {
                     if (isInSmallStar) {
                         // L'utilisateur touche l'intérieur du petit cercle
                         Log.i("caca", "Mort")
+                        biscuitActivity.penalty()
                     }
                 }
                 return true
@@ -544,6 +562,7 @@ class StarView(context: Context?) : View(context) {
                     if (isInSmallStar) {
                         // L'utilisateur touche l'intérieur du petit cercle
                         Log.i("caca", "Mort")
+                        biscuitActivity.penalty()
                         trace=false
                     } else if (isInBigStar) {
                         points.add(PointF(x, y))
@@ -588,5 +607,9 @@ class StarView(context: Context?) : View(context) {
         Log.i("star",(circumference - distance).toString())
         Log.i("", sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2)).toString())
         return circumference - distance  < 0f && sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2))<30f
+    }
+
+    fun setBiscuitActivity(activity: Biscuit) {
+        biscuitActivity = activity
     }
 }

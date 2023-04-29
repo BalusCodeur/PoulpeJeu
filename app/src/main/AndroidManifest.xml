@@ -73,6 +73,11 @@
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
+        <activity
+            android:name=".Practice"
+            android:exported="true"
+            android:theme="@style/Theme.PoulpeJeu">
+        </activity>
     </application>
 
 </manifest>

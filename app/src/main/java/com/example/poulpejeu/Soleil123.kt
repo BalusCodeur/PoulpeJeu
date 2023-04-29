@@ -178,9 +178,10 @@ class Soleil123 : ComponentActivity() {
         }
 
     fun victory() {
-        setContentView(R.layout.soleil_win_layout)
-        score = findViewById(R.id.score)
-        score.text = ((System.currentTimeMillis() - start) / 1000.0).toString() + " secondes"
+        val score = ((System.currentTimeMillis() - start) / 1000.0).toString() + " secondes"
+        val intent = Intent(this, Result::class.java)
+        intent.putExtra("score",score)
+        startActivity(intent)
         end = true
     }
 }
