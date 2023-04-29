@@ -8,17 +8,9 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.poulpejeu.ui.theme.PoulpeJeuTheme
+import com.example.poulpejeu.P2P.WifiDirectActivity
 
 class MainActivity : ComponentActivity() {
 
@@ -55,6 +47,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var buttonBiscuit: Button
     private lateinit var buttonBridge: Button
     private lateinit var buttonRope: Button
+    private lateinit var buttonP2P: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +61,7 @@ class MainActivity : ComponentActivity() {
         buttonBiscuit = findViewById(R.id.biscuitButton)
         buttonBridge = findViewById(R.id.bridgeButton)
         buttonRope = findViewById(R.id.ropeButton)
+        buttonP2P = findViewById(R.id.P2PButton)
 
         title.setImageResource(R.drawable.poulpejeu)
 
@@ -106,6 +100,11 @@ class MainActivity : ComponentActivity() {
         buttonRope.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
             val intent = Intent(this, RopeGame::class.java)
+            startActivity(intent)
+        }
+        buttonP2P.setOnClickListener {
+            // Créez une Intent pour ouvrir votre nouvelle page
+            val intent = Intent(this, WifiDirectActivity::class.java)
             startActivity(intent)
         }
         requestRecordAudioPermission()

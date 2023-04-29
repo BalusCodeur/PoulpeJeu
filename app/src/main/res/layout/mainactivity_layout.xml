@@ -96,6 +96,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bridgeButton" />
 
+        <Button
+            android:id="@+id/P2PButton"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bridgeButton"
+            android:layout_gravity="center_horizontal"
+            android:text="find device"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ropeButton" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
