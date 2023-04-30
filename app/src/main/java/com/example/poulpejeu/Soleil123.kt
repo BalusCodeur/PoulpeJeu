@@ -10,6 +10,7 @@ import android.hardware.SensorManager
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
@@ -17,6 +18,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.core.view.isVisible
 
 class Soleil123 : ComponentActivity() {
     private lateinit var fille: ImageView
