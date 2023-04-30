@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import kotlinx.coroutines.delay
 
 
 class Quizz : ComponentActivity() {
@@ -91,33 +92,34 @@ class Quizz : ComponentActivity() {
     private fun goToNextQuestion() {
         // Delay switching to the next question by 1 second for visual feedback
         window.decorView.postDelayed({
-            // Increment current question index
+            Log.i("question",currentQuestionIndex.toString())
             currentQuestionIndex++
-
+            // Increment current question index
             // If all questions have been answered, show score and reset the quiz
             if (currentQuestionIndex == questions.size) {
                 showScore()
-                resetQuiz()
+                //resetQuiz()
             } else {
                 // Otherwise, show the next question
-                setQuestion(questions[currentQuestionIndex])
+              setQuestion(questions[currentQuestionIndex])
             }
         }, 1000)
     }
 
 
             fun showScore() {
-            // Show score in a toast message
-            val score = "$score/${questions.size}";
-                if(intent.getIntExtra("mode",0)==0) {
+                // Show score in a toast message
+                val score = "$score/${questions.size}";
+
+                if (intent.getIntExtra("mode", 0) == 0) {
                     val intent = Intent(this, PracticeResult::class.java)
                     intent.putExtra("score", score)
                     startActivity(intent)
-                }else {
+                } else {
                     val bundle = intent.extras
-                    val intent = Intent(this,PlayResult::class.java)
+                    val intent = Intent(this, PlayResult::class.java)
                     if (bundle != null) {
-                        bundle.putString("score",score)
+                        bundle.putString("score", score)
                         intent.putExtras(bundle)
                     }
                     startActivity(intent)

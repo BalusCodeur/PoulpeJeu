@@ -1,5 +1,6 @@
 package com.example.poulpejeu
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.*
@@ -26,19 +27,41 @@ class Biscuit: ComponentActivity() {
     private lateinit var biscuit : ImageView
     private lateinit var chrono: TextView
     private lateinit var container: FrameLayout
+
     var end = false
-    lateinit var result:TextView
+    var play = false
     private var start = 0L
     private lateinit var countDownTimer: CountDownTimer
     private var timeElapsed: Long = 0
+
+    val paint = Paint().apply {
+        color = Color.rgb(183, 111, 55)
+        style = Paint.Style.STROKE
+        strokeWidth = 100f
+        alpha = 180
+    }
+
+    val transparent = Paint().apply {
+        color = Color.TRANSPARENT
+        style = Paint.Style.STROKE
+        strokeWidth = 5f
+    }
+
+    val stylo = Paint().apply {
+        color = Color.rgb(160,82,45)
+        style = Paint.Style.STROKE
+        strokeWidth = 15f
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.biscuit_layout)
         circleView = CircleView(this)
-
         squareView = SquareView(this)
         starView = StarView(this)
+
+        biscuit = findViewById(R.id.biscuit)
+        biscuit.setImageResource(R.drawable.biscuit)
 
         count = findViewById(R.id.count)
         chrono = findViewById(R.id.chrono)
@@ -55,10 +78,7 @@ class Biscuit: ComponentActivity() {
 
             override fun onFinish() {}
         }
-
         initGame()
-
-
     }
 
     fun startCountdown(seconds: Int) {
@@ -66,44 +86,39 @@ class Biscuit: ComponentActivity() {
         if (seconds > 0) {
             Handler().postDelayed({ startCountdown(seconds - 1) }, 1000)
         } else {
-            count?.isVisible=false
+            count.isVisible =false
             start = System.currentTimeMillis()
+            play = true
             countDownTimer.start()
         }
 
     }
 
     fun initGame(){
-        val randomNumber = Random.nextInt(3)
-        Log.i("",randomNumber.toString())
-
+        //val randomNumber = Random.nextInt(3)
+        val randomNumber = 2
         when (randomNumber){
             0 -> circle()
-            1 -> circle()
-            2 -> circle()
+            1 -> square()
+            2 -> star()
         }
-
-
     }
-
     fun circle(){
         container.addView(circleView)
-
-        biscuit = findViewById(R.id.biscuit)
-        biscuit.setImageResource(R.drawable.biscuit)
-
         circleView.setBiscuitActivity(this)
         startCountdown(3)
-
     }
 
     fun square(){
-
         container.addView(squareView)
+        squareView.setBiscuitActivity(this)
+        startCountdown(3)
     }
 
     fun star(){
         container.addView(starView)
+        starView.setBiscuitActivity(this)
+        startCountdown(3)
     }
 
     fun penalty() {
@@ -141,8 +156,6 @@ class CircleView(context: Context) : View(context) {
     val bigRadius = 525f
     private var points = mutableListOf<PointF>()
     var distancetrace = 0f
-    val paintblack = Paint()
-    val paintred = Paint()
     var trace = false
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -150,100 +163,103 @@ class CircleView(context: Context) : View(context) {
         centerX = width / 2f
         centerY = height / 2f
 
-        paintblack.color = Color.BLACK // Couleur rouge définie dans les ressources
+        /*paintblack.color = Color.BLACK // Couleur rouge définie dans les ressources
         paintblack.style = Paint.Style.STROKE // Cercle non rempli
         paintblack.strokeWidth = 5f
 
         paintred.color = Color.RED
         paintred.style= Paint.Style.STROKE
-        paintred.strokeWidth = 15f
-        canvas.drawCircle(centerX, centerY, smallRadius, paintblack)
-        canvas.drawCircle(centerX, centerY, mediumRadius, paintblack)
-        canvas.drawCircle(centerX, centerY, bigRadius, paintblack)
+        paintred.strokeWidth = 15f*/
+        canvas.drawCircle(centerX, centerY, smallRadius, biscuitActivity.transparent)
+        canvas.drawCircle(centerX, centerY, mediumRadius, biscuitActivity.paint)
+        canvas.drawCircle(centerX, centerY, bigRadius, biscuitActivity.transparent)
 
         if (points.size > 1) {
             for (i in 1 until points.size) {
                 val lastPoint = points[i - 1]
                 val currentPoint = points[i]
-                canvas.drawLine(lastPoint.x, lastPoint.y, currentPoint.x, currentPoint.y, paintred)
+                canvas.drawLine(lastPoint.x, lastPoint.y, currentPoint.x, currentPoint.y, biscuitActivity.stylo)
             }
         }
     }
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val x = event.x
-        val y = event.y
-        val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
-        if(isCircle(points)&& !biscuitActivity.end){
-            biscuitActivity.showScore()
-        }
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                if(points.size>1) {
-                    distancetrace = sqrt(
-                        (x - points[points.size - 1].x).pow(2) + (y - points[points.size - 1].y).pow(
-                            2
-                        )
-                    );
-                }
-                // Le doigt touche l'écran, on initialise les coordonnées de départ
-                if (distancetrace < 50f) {
-                    if (distance <= smallRadius) {
-                        // L'utilisateur touche l'intérieur du petit cercle
-                        biscuitActivity.penalty()
+        if (biscuitActivity.play) {
+            val x = event.x
+            val y = event.y
+            val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
+            if (isCircle(points) && !biscuitActivity.end) {
+                biscuitActivity.showScore()
+            }
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    if (points.size > 1) {
+                        distancetrace = sqrt(
+                            (x - points[points.size - 1].x).pow(2) + (y - points[points.size - 1].y).pow(
+                                2
+                            )
+                        );
+                    }
+                    // Le doigt touche l'écran, on initialise les coordonnées de départ
+                    if (distancetrace < 50f) {
+                        if (distance <= smallRadius) {
+                            // L'utilisateur touche l'intérieur du petit cercle
+                            biscuitActivity.penalty()
 
-                        Log.i("caca", "Mort")
-                    } else if (distance <= bigRadius) {
-                        // L'utilisateur touche l'intérieur du grand cercle
-                        Log.i("big", "big")
-                        points.add(PointF(event.x, event.y))
+                            Log.i("caca", "Mort")
+                        } else if (distance <= bigRadius) {
+                            // L'utilisateur touche l'intérieur du grand cercle
+                            Log.i("big", "big")
+                            points.add(PointF(event.x, event.y))
+                        } else {
+                            Log.i("Menfou", "Menfou")
+                        }
+                        trace = true
                     } else {
-                        Log.i("Menfou", "Menfou")
+                        trace = false
+                        if (distance <= smallRadius) {
+                            // L'utilisateur touche l'intérieur du petit cercle
+                            biscuitActivity.penalty()
+                            Log.i("caca", "Mort")
+                        }
                     }
-                    trace=true
-                } else {
-                    trace=false
-                    if (distance <= smallRadius) {
-                        // L'utilisateur touche l'intérieur du petit cercle
-                        biscuitActivity.penalty()
-                        Log.i("caca", "Mort")
+                    return true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    // Le doigt se déplace, on dessine une ligne entre les coordonnées précédentes et actuelles
+                    val x = event.x
+                    val y = event.y
+                    val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
+                    if (points.size > 0) {
+                        distancetrace = sqrt(
+                            (x - points[points.size - 1].x).pow(2) + (y - points[points.size - 1].y).pow(
+                                2
+                            )
+                        );
                     }
-                }
-                return true
-            }
-            MotionEvent.ACTION_MOVE -> {
-                // Le doigt se déplace, on dessine une ligne entre les coordonnées précédentes et actuelles
-                val x = event.x
-                val y = event.y
-                val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
-                if(points.size>0) {
-                    distancetrace = sqrt(
-                        (x - points[points.size - 1].x).pow(2) + (y - points[points.size - 1].y).pow(
-                            2
-                        )
-                    );
-                }
-                if (trace) {
-                    if (distance <= smallRadius) {
-                        // L'utilisateur touche l'intérieur du petit cercle
-                        Log.i("caca", "Mort")
-                        biscuitActivity.penalty()
-                        trace=false
-                    } else if (distance <= bigRadius) {
-                        points.add(PointF(x, y))
-                        invalidate()
+                    if (trace) {
+                        if (distance <= smallRadius) {
+                            // L'utilisateur touche l'intérieur du petit cercle
+                            Log.i("caca", "Mort")
+                            biscuitActivity.penalty()
+                            trace = false
+                        } else if (distance <= bigRadius) {
+                            points.add(PointF(x, y))
+                            invalidate()
+                        } else {
+                            trace = false
+                        }
                     }
-                    else{trace=false}
+                    return true
                 }
-                return true
-            }
-            MotionEvent.ACTION_UP -> {
-                // Le doigt est levé, on termine le dessin de la ligne
-                return true
+                MotionEvent.ACTION_UP -> {
+                    // Le doigt est levé, on termine le dessin de la ligne
+                    return true
+                }
             }
         }
         return super.onTouchEvent(event)
     }
-    fun isCircle(points: List<PointF>): Boolean {
+    private fun isCircle(points: List<PointF>): Boolean {
         if (points.size < 150) return false // Il faut au moins 3 points pour dessiner un cercle
         val firstPoint = points[0]
         val lastPoint = points[points.size - 1]
@@ -260,10 +276,6 @@ class CircleView(context: Context) : View(context) {
         return circumference - distance  < 0f && sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2))<30f
     }
 
-    fun getPoints():List<PointF>{
-        return this.points
-    }
-
 
     fun setBiscuitActivity(activity: Biscuit) {
         biscuitActivity = activity
@@ -272,8 +284,8 @@ class CircleView(context: Context) : View(context) {
 class SquareView(context: Context?) : View(context) {
     private lateinit var biscuitActivity: Biscuit
 
-    private val smallSquareSize = 850f
-    private val mediumSquareSize = 900f
+    private val smallSquareSize = 750f
+    private val mediumSquareSize = 850f
     private val largeSquareSize = 950f
 
     // Récupérez les dimensions de la vue dans la fonction onDraw
@@ -290,7 +302,7 @@ class SquareView(context: Context?) : View(context) {
     var distancetrace = 0f
     var trace = false
 
-    private val mediumSquarePaint = Paint().apply {
+    /*private val mediumSquarePaint = Paint().apply {
         color = Color.BLACK
         style = Paint.Style.STROKE
         strokeWidth = 5f
@@ -300,7 +312,7 @@ class SquareView(context: Context?) : View(context) {
         color = Color.RED
         style = Paint.Style.STROKE
         strokeWidth = 5f
-    }
+    }*/
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -323,90 +335,102 @@ class SquareView(context: Context?) : View(context) {
         largeSquareY = centerY - largeSquareSize / 2
 
         // Dessinez les carrés
-        canvas.drawRect(largeSquareX, largeSquareY, largeSquareX + largeSquareSize, largeSquareY + largeSquareSize, mediumSquarePaint)
-        canvas.drawRect(mediumSquareX, mediumSquareY, mediumSquareX + mediumSquareSize, mediumSquareY + mediumSquareSize, mediumSquarePaint)
-        canvas.drawRect(smallSquareX, smallSquareY, smallSquareX + smallSquareSize, smallSquareY + smallSquareSize, mediumSquarePaint)
+        canvas.drawRect(largeSquareX, largeSquareY, largeSquareX + largeSquareSize, largeSquareY + largeSquareSize, biscuitActivity.transparent)
+        canvas.drawRect(mediumSquareX, mediumSquareY, mediumSquareX + mediumSquareSize, mediumSquareY + mediumSquareSize, biscuitActivity.paint)
+        canvas.drawRect(smallSquareX, smallSquareY, smallSquareX + smallSquareSize, smallSquareY + smallSquareSize, biscuitActivity.transparent)
 
         if (points.size > 1) {
             for (i in 1 until points.size) {
                 val lastPoint = points[i - 1]
                 val currentPoint = points[i]
-                canvas.drawLine(lastPoint.x, lastPoint.y, currentPoint.x, currentPoint.y, paintred)
+                canvas.drawLine(lastPoint.x, lastPoint.y, currentPoint.x, currentPoint.y, biscuitActivity.stylo)
             }
         }
     }
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if(isSquare(points)){
-            biscuitActivity.showScore()
-        }
-        val x = event.x
-        val y = event.y
-        val smallSquareRect = RectF(smallSquareX, smallSquareY, smallSquareX + smallSquareSize, smallSquareY + smallSquareSize)
-        val largeSquareRect = RectF(largeSquareX, largeSquareY, largeSquareX + largeSquareSize, largeSquareY + largeSquareSize)
-        val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                if(points.size>1) {
-                    distancetrace = sqrt(
-                        (x - points[points.size - 1].x).pow(2) + (y - points[points.size - 1].y).pow(
-                            2
-                        )
-                    );
-                }
-                // Le doigt touche l'écran, on initialise les coordonnées de départ
-                if (distancetrace < 50f) {
-                    if (smallSquareRect.contains(x, y)) {
-                        // L'utilisateur touche l'intérieur du petit cercle
-                        Log.i("caca", "Mort")
-                        biscuitActivity.penalty()
-                    } else if (!largeSquareRect.contains(x, y)) {
-                        Log.i("Menfou", "Menfou")
+        if (biscuitActivity.play) {
+            if (isSquare(points)&& !biscuitActivity.end) {
+                biscuitActivity.showScore()
+            }
+            val x = event.x
+            val y = event.y
+            val smallSquareRect = RectF(
+                smallSquareX,
+                smallSquareY,
+                smallSquareX + smallSquareSize,
+                smallSquareY + smallSquareSize
+            )
+            val largeSquareRect = RectF(
+                largeSquareX,
+                largeSquareY,
+                largeSquareX + largeSquareSize,
+                largeSquareY + largeSquareSize
+            )
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    if (points.size > 1) {
+                        distancetrace = sqrt(
+                            (x - points[points.size - 1].x).pow(2) + (y - points[points.size - 1].y).pow(
+                                2
+                            )
+                        );
+                    }
+                    // Le doigt touche l'écran, on initialise les coordonnées de départ
+                    if (distancetrace < 50f) {
+                        if (smallSquareRect.contains(x, y)) {
+                            // L'utilisateur touche l'intérieur du petit cercle
+                            Log.i("caca", "Mort")
+                            biscuitActivity.penalty()
+                        } else if (!largeSquareRect.contains(x, y)) {
+                            Log.i("Menfou", "Menfou")
+                        } else {
+                            // L'utilisateur touche l'intérieur du grand cercle
+                            Log.i("big", "big")
+                            points.add(PointF(event.x, event.y))
+                        }
+                        trace = true
                     } else {
-                        // L'utilisateur touche l'intérieur du grand cercle
-                        Log.i("big", "big")
-                        points.add(PointF(event.x, event.y))
+                        trace = false
+                        if (smallSquareRect.contains(x, y)) {
+                            // L'utilisateur touche l'intérieur du petit cercle
+                            Log.i("caca", "Mort")
+                            biscuitActivity.penalty()
+                        }
                     }
-                    trace=true
-                } else {
-                    trace=false
-                    if (smallSquareRect.contains(x, y)) {
-                        // L'utilisateur touche l'intérieur du petit cercle
-                        Log.i("caca", "Mort")
-                        biscuitActivity.penalty()
+                    return true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    // Le doigt se déplace, on dessine une ligne entre les coordonnées précédentes et actuelles
+                    val x = event.x
+                    val y = event.y
+                    val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
+                    if (points.size > 0) {
+                        distancetrace = sqrt(
+                            (x - points[points.size - 1].x).pow(2) + (y - points[points.size - 1].y).pow(
+                                2
+                            )
+                        );
                     }
-                }
-                return true
-            }
-            MotionEvent.ACTION_MOVE -> {
-                // Le doigt se déplace, on dessine une ligne entre les coordonnées précédentes et actuelles
-                val x = event.x
-                val y = event.y
-                val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
-                if(points.size>0) {
-                    distancetrace = sqrt(
-                        (x - points[points.size - 1].x).pow(2) + (y - points[points.size - 1].y).pow(
-                            2
-                        )
-                    );
-                }
-                if (trace) {
-                    if (smallSquareRect.contains(x, y)) {
-                        // L'utilisateur touche l'intérieur du petit cercle
-                        Log.i("caca", "Mort")
-                        biscuitActivity.penalty()
-                        trace=false
-                    } else if (largeSquareRect.contains(x, y)) {
-                        points.add(PointF(x, y))
-                        invalidate()
-                        Log.i("result",isSquare(points).toString())
+                    if (trace) {
+                        if (smallSquareRect.contains(x, y)) {
+                            // L'utilisateur touche l'intérieur du petit cercle
+                            Log.i("caca", "Mort")
+                            biscuitActivity.penalty()
+                            trace = false
+                        } else if (largeSquareRect.contains(x, y)) {
+                            points.add(PointF(x, y))
+                            invalidate()
+                            //Log.i("result", isSquare(points).toString())
+                        } else {
+                            trace = false
+                        }
                     }
-                    else{trace=false}
+                    return true
                 }
-                return true
-            }
-            MotionEvent.ACTION_UP -> {
-                // Le doigt est levé, on termine le dessin de la ligne
-                return true
+                MotionEvent.ACTION_UP -> {
+                    // Le doigt est levé, on termine le dessin de la ligne
+                    return true
+                }
             }
         }
         return super.onTouchEvent(event)
@@ -421,9 +445,9 @@ class SquareView(context: Context?) : View(context) {
             val p2 = points[i + 1]
             distance += sqrt((p2.x - p1.x).pow(2) + (p2.y - p1.y).pow(2))
         }
-        val circumference = 3400f
-        Log.i("square",(circumference - distance).toString())
-        Log.i("", sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2)).toString())
+        val circumference = 3000f
+        //Log.i("square",(circumference - distance).toString())
+        //Log.i("", sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2)).toString())
         return circumference - distance  < 0f && sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2))<30f
     }
 
@@ -436,8 +460,8 @@ class StarView(context: Context?) : View(context) {
 
     // Définir la taille des étoiles
     val largeStarSize =  1100f
-    val mediumStarSize = 950f
-    val smallStarSize = 800f
+    val mediumStarSize = 900f
+    val smallStarSize = 700f
     var centerX = 0f
     var centerY = 0f
     val angle = 360f / 5f
@@ -450,27 +474,23 @@ class StarView(context: Context?) : View(context) {
     var distancetrace = 0f
     var trace = false
 
-    private val paintred = Paint().apply {
+    /*private val paintred = Paint().apply {
         color = Color.RED
         style = Paint.Style.STROKE
         strokeWidth = 5f
-    }
+    }*/
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-
 
         // Définir les coordonnées du centre des étoiles
         centerX = width.toFloat() / 2f
         centerY = height.toFloat() / 2f
 
-
-
         // Définir les angles pour les branches des étoiles
-
         val angleOffset = -90f
 
         // Définir le pinceau pour les étoiles
-        val starPaint = Paint().apply {
+        /*val starPaint = Paint().apply {
             color = Color.BLACK
             style = Paint.Style.STROKE
             strokeWidth = 5f
@@ -478,18 +498,17 @@ class StarView(context: Context?) : View(context) {
         val transparentPaint = Paint().apply{
             color = Color.TRANSPARENT
 
-        }
-
+        }*/
         // Dessiner les étoiles
-        smallPath = drawStar(canvas, centerX, centerY, smallStarSize, angle, innerAngle, angleOffset, starPaint)
-        mediumPath = drawStar(canvas, centerX, centerY, mediumStarSize, angle, innerAngle, angleOffset, starPaint)
-        bigPath = drawStar(canvas, centerX, centerY, largeStarSize, angle, innerAngle, angleOffset, starPaint)
+        smallPath = drawStar(canvas, centerX, centerY, smallStarSize, angle, innerAngle, angleOffset, biscuitActivity.transparent)
+        mediumPath = drawStar(canvas, centerX, centerY, mediumStarSize, angle, innerAngle, angleOffset, biscuitActivity.paint)
+        bigPath = drawStar(canvas, centerX, centerY, largeStarSize, angle, innerAngle, angleOffset, biscuitActivity.transparent)
 
         if (points.size > 1) {
             for (i in 1 until points.size) {
                 val lastPoint = points[i - 1]
                 val currentPoint = points[i]
-                canvas.drawLine(lastPoint.x, lastPoint.y, currentPoint.x, currentPoint.y, paintred)
+                canvas.drawLine(lastPoint.x, lastPoint.y, currentPoint.x, currentPoint.y, biscuitActivity.stylo)
             }
         }
     }
@@ -515,77 +534,78 @@ class StarView(context: Context?) : View(context) {
 
         return path
     }
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if(isStar(points)){
-            biscuitActivity.showScore()
-        }
-        val x = event.x
-        val y = event.y
-        val isInSmallStar = isPointInsideStar(x, y, smallPath)
-        val isInBigStar = isPointInsideStar(x, y, bigPath)
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                if(points.size>1) {
-                    distancetrace = sqrt(
-                        (x - points[points.size - 1].x).pow(2) + (y - points[points.size - 1].y).pow(
-                            2
-                        )
-                    );
-                }
-                // Le doigt touche l'écran, on initialise les coordonnées de départ
-                if (distancetrace < 50f) {
-                    if (isInSmallStar) {
-                        // L'utilisateur touche l'intérieur du petit cercle
-                        Log.i("caca", "Mort")
-                        biscuitActivity.penalty()
-                    } else if (!isInBigStar) {
-                        Log.i("Menfou", "Menfou")
+        if (biscuitActivity.play) {
+            if (isStar(points)&& !biscuitActivity.end) {
+                biscuitActivity.showScore()
+            }
+            val x = event.x
+            val y = event.y
+            val isInSmallStar = isPointInsideStar(x, y, smallPath)
+            val isInBigStar = isPointInsideStar(x, y, bigPath)
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    if (points.size > 1) {
+                        distancetrace = sqrt(
+                            (x - points[points.size - 1].x).pow(2) + (y - points[points.size - 1].y).pow(
+                                2
+                            )
+                        );
+                    }
+                    // Le doigt touche l'écran, on initialise les coordonnées de départ
+                    if (distancetrace < 50f) {
+                        if (isInSmallStar) {
+                            // L'utilisateur touche l'intérieur du petit cercle
+                            Log.i("caca", "Mort")
+                            biscuitActivity.penalty()
+                        } else if (!isInBigStar) {
+                            Log.i("Menfou", "Menfou")
+                        } else {
+                            // L'utilisateur touche l'intérieur du grand cercle
+                            Log.i("big", "big")
+                            points.add(PointF(event.x, event.y))
+                        }
+                        trace = true
                     } else {
-                        // L'utilisateur touche l'intérieur du grand cercle
-                        Log.i("big", "big")
-                        points.add(PointF(event.x, event.y))
+                        trace = false
+                        if (isInSmallStar) {
+                            // L'utilisateur touche l'intérieur du petit cercle
+                            Log.i("caca", "Mort")
+                            biscuitActivity.penalty()
+                        }
                     }
-                    trace=true
-                } else {
-                    trace=false
-                    if (isInSmallStar) {
-                        // L'utilisateur touche l'intérieur du petit cercle
-                        Log.i("caca", "Mort")
-                        biscuitActivity.penalty()
+                    return true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    // Le doigt se déplace, on dessine une ligne entre les coordonnées précédentes et actuelles
+                    if (points.size > 0) {
+                        distancetrace = sqrt(
+                            (x - points[points.size - 1].x).pow(2) + (y - points[points.size - 1].y).pow(
+                                2
+                            )
+                        );
                     }
-                }
-                return true
-            }
-            MotionEvent.ACTION_MOVE -> {
-                // Le doigt se déplace, on dessine une ligne entre les coordonnées précédentes et actuelles
-                val x = event.x
-                val y = event.y
-                val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
-                if(points.size>0) {
-                    distancetrace = sqrt(
-                        (x - points[points.size - 1].x).pow(2) + (y - points[points.size - 1].y).pow(
-                            2
-                        )
-                    );
-                }
-                if (trace) {
-                    if (isInSmallStar) {
-                        // L'utilisateur touche l'intérieur du petit cercle
-                        Log.i("caca", "Mort")
-                        biscuitActivity.penalty()
-                        trace=false
-                    } else if (isInBigStar) {
-                        points.add(PointF(x, y))
-                        invalidate()
-                        Log.i("result",isStar(points).toString())
+                    if (trace) {
+                        if (isInSmallStar) {
+                            // L'utilisateur touche l'intérieur du petit cercle
+                            Log.i("caca", "Mort")
+                            biscuitActivity.penalty()
+                            trace = false
+                        } else if (isInBigStar) {
+                            points.add(PointF(x, y))
+                            invalidate()
+                            Log.i("result", isStar(points).toString())
+                        } else {
+                            trace = false
+                        }
                     }
-                    else{trace=false}
+                    return true
                 }
-                return true
-            }
-            MotionEvent.ACTION_UP -> {
-                // Le doigt est levé, on termine le dessin de la ligne
-                return true
+                MotionEvent.ACTION_UP -> {
+                    // Le doigt est levé, on termine le dessin de la ligne
+                    return true
+                }
             }
         }
         return super.onTouchEvent(event)
@@ -603,7 +623,7 @@ class StarView(context: Context?) : View(context) {
         starRegion.setPath(starPath, Region(bounds.left.toInt(), bounds.top.toInt(), bounds.right.toInt(), bounds.bottom.toInt()))
         return starRegion.contains(x.toInt(), y.toInt())
     }
-    fun isStar(points: List<PointF>): Boolean {
+    private fun isStar(points: List<PointF>): Boolean {
         if (points.size < 150) return false // Il faut au moins 3 points pour dessiner un cercle
         val firstPoint = points[0]
         val lastPoint = points[points.size - 1]
@@ -613,7 +633,7 @@ class StarView(context: Context?) : View(context) {
             val p2 = points[i + 1]
             distance += sqrt((p2.x - p1.x).pow(2) + (p2.y - p1.y).pow(2))
         }
-        val circumference = 3000f
+        val circumference = 2000f
         Log.i("star",(circumference - distance).toString())
         Log.i("", sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2)).toString())
         return circumference - distance  < 0f && sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2))<30f

@@ -102,7 +102,8 @@ class BridgeGame : ComponentActivity() {
         }
 
     }
-    
+
+
     private fun reInit() {
         currentRow = 8;
         for (i in buttons.indices) {
