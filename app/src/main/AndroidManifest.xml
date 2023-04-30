@@ -84,3 +84,4 @@
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
     </application>
+</manifest>
