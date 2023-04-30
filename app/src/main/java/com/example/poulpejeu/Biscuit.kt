@@ -26,6 +26,7 @@ class Biscuit: ComponentActivity() {
     private lateinit var biscuit : ImageView
     private lateinit var chrono: TextView
     private lateinit var container: FrameLayout
+    var end = false
     lateinit var result:TextView
     private var start = 0L
     private lateinit var countDownTimer: CountDownTimer
@@ -110,20 +111,20 @@ class Biscuit: ComponentActivity() {
     }
 
     fun showScore(){
+        end = true
         val score = (timeElapsed/1000).toString()+","+ (timeElapsed%1000) + "s"
-        val bundle = intent.extras
         if(intent.getIntExtra("mode",0)==0) {
             val intent = Intent(this, PracticeResult::class.java)
             intent.putExtra("score", score)
             startActivity(intent)
         }else {
+            val bundle = intent.extras
             val intent = Intent(this,PlayResult::class.java)
-            intent.putExtra("score", score)
             if (bundle != null) {
+                bundle.putString("score",score)
                 intent.putExtras(bundle)
             }
             startActivity(intent)
-
         }
         finish()
     }
@@ -172,7 +173,7 @@ class CircleView(context: Context) : View(context) {
         val x = event.x
         val y = event.y
         val distance = sqrt((x - centerX).pow(2) + (y - centerY).pow(2))
-        if(isCircle(points)){
+        if(isCircle(points)&& !biscuitActivity.end){
             biscuitActivity.showScore()
         }
         when (event.action) {
@@ -230,8 +231,6 @@ class CircleView(context: Context) : View(context) {
                     } else if (distance <= bigRadius) {
                         points.add(PointF(x, y))
                         invalidate()
-
-                        Log.i("result",isCircle(points).toString())
                     }
                     else{trace=false}
                 }
@@ -256,8 +255,8 @@ class CircleView(context: Context) : View(context) {
             distance += sqrt((p2.x - p1.x).pow(2) + (p2.y - p1.y).pow(2))
         }
         val circumference = 2 * PI * radius
-        Log.i("cercle",(circumference - distance).toString())
-        Log.i("", sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2)).toString())
+        //Log.i("cercle",(circumference - distance).toString())
+        //Log.i("", sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2)).toString())
         return circumference - distance  < 0f && sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2))<30f
     }
 

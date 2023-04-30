@@ -2,6 +2,7 @@ package com.example.poulpejeu
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -15,6 +16,7 @@ class PlayResult : ComponentActivity() {
         setContentView(R.layout.play_result_layout)
         score = findViewById(R.id.score)
         next = findViewById(R.id.nextButton)
+        intent.getStringExtra("score")?.let { Log.i("intent", it) }
         // Récupérer le score depuis l'intent
         val scoreActivity = intent.getStringExtra("score")
         // Afficher le score dans le TextView

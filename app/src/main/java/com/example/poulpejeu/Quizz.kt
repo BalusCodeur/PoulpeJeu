@@ -108,22 +108,22 @@ class Quizz : ComponentActivity() {
 
             fun showScore() {
             // Show score in a toast message
-            val bundle = intent.extras
             val score = "$score/${questions.size}";
-            if(intent.getIntExtra("mode",0)==0) {
-                val intent = Intent(this, PracticeResult::class.java)
-                intent.putExtra("score", score)
-                startActivity(intent)
-            }else {
-                val intent = Intent(this,PlayResult::class.java)
-                intent.putExtra("score", score)
-                if (bundle != null) {
-                    intent.putExtras(bundle)
+                if(intent.getIntExtra("mode",0)==0) {
+                    val intent = Intent(this, PracticeResult::class.java)
+                    intent.putExtra("score", score)
+                    startActivity(intent)
+                }else {
+                    val bundle = intent.extras
+                    val intent = Intent(this,PlayResult::class.java)
+                    if (bundle != null) {
+                        bundle.putString("score",score)
+                        intent.putExtras(bundle)
+                    }
+                    startActivity(intent)
                 }
-                startActivity(intent)
-            }
                 finish()
-        }
+            }
 
             fun resetQuiz() {
             // Reset current question index and score
