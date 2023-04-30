@@ -29,6 +29,7 @@
             android:theme="@style/Theme.PoulpeJeu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -38,6 +39,9 @@
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
+        <service
+            android:name=".P2P.FileTransferService"
+            android:enabled="true" />
         <activity
             android:name=".Quizz"
             android:exported="true"
