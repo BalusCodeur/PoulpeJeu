@@ -23,8 +23,8 @@ class Soleil123 : ComponentActivity() {
     private lateinit var runner: ImageView
     private lateinit var tdm: ImageView
     private lateinit var run : Button
-    private lateinit var count : TextView
     private lateinit var score : TextView
+    private lateinit var count : TextView
     val translationAnim = TranslateAnimation(0f, 0f, 0f, -40f) // déplace de 200 pixels vers le haut
     private val counterInterval = 500L // intervalle de comptage en ms
     private val countingPattern = arrayOf(10L, 10L, 10L, 10L) // temps de comptage et de pause en secondes
@@ -32,6 +32,7 @@ class Soleil123 : ComponentActivity() {
     private var isCounting = false // indique si le comptage est en cours
     private var counter = 0L
     private var start:Long = 0
+    var startgame = false
     var end = false
 
     private lateinit var sonTourne : MediaPlayer
@@ -45,6 +46,9 @@ class Soleil123 : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.soleil123_layout)
 
+        count = findViewById(R.id.count)
+        count.isVisible = false
+
         sensorManager.registerListener(sensorEventListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
         fille = findViewById(R.id.fille)
         fille.setImageResource(R.drawable.fille)
@@ -52,7 +56,6 @@ class Soleil123 : ComponentActivity() {
         runner = findViewById(R.id.runner)
         runner.setImageResource(R.drawable.runner)
 
-        count = findViewById(R.id.count)
         run = findViewById(R.id.Run)
 
 
@@ -66,9 +69,12 @@ class Soleil123 : ComponentActivity() {
         translationAnim.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {
                 if (isCounting) {
+                    sonCompte.stop()
+                    sonTourne.stop()
                     setContentView(R.layout.soleil_dead_layout)
                     tdm = findViewById(R.id.tdm)
                     tdm.setImageResource(R.drawable.tdm)
+                    end= true
                 }
                 // Rien à faire ici
             }
@@ -85,9 +91,9 @@ class Soleil123 : ComponentActivity() {
         })
 
         run.setOnClickListener {
-            start = System.currentTimeMillis()
-            runner.startAnimation(translationAnim)
-            startCounting()
+            run.isVisible=false
+            count.isVisible = true
+            startCountdown(3)
         }
     }
     val sensorEventListener = object : SensorEventListener {
@@ -99,7 +105,7 @@ class Soleil123 : ComponentActivity() {
 
             val acceleration = kotlin.math.sqrt(x * x + y * y + z * z)
             //Log.i("Vitesse",acceleration.toString())
-            if (acceleration > 15 && runner.translationY >= -1260) { // Choisissez un seuil approprié ici
+            if (acceleration > 15 && runner.translationY >= -1260 && startgame) { // Choisissez un seuil approprié ici
                 runner.startAnimation(translationAnim)
                 Log.i("Position",runner.translationY.toString())
                 //val anim = AnimationUtils.loadAnimation(this, R.anim.running_anim)
@@ -133,7 +139,6 @@ class Soleil123 : ComponentActivity() {
 
             val countDuration = countingPattern[currentCountIndex] * 1000L
             val pauseDuration = 3000L
-            count.setText("Pas pause")
 
             // Démarre le CountDownTimer pour le comptage
         if(!end){
@@ -149,7 +154,6 @@ class Soleil123 : ComponentActivity() {
                 override fun onFinish() {
                     if(!end) {
                         isCounting = !isCounting
-                        count.setText("Pause")
                         // Démarre le CountDownTimer pour la pause
                         object : CountDownTimer(pauseDuration, counterInterval) {
                             override fun onTick(millisUntilFinished: Long) {
@@ -187,5 +191,16 @@ class Soleil123 : ComponentActivity() {
             startActivity(intent)
         }
         end = true
+    }
+    fun startCountdown(seconds: Int) {
+        count.text = seconds.toString()
+        if (seconds > 0) {
+            Handler().postDelayed({ startCountdown(seconds - 1) }, 1000)
+        } else {
+            count.isVisible=false
+            startgame=true
+            start = System.currentTimeMillis()
+            startCounting()
+        }
     }
 }
