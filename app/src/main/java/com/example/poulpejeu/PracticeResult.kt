@@ -6,11 +6,16 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
+import com.google.gson.Gson
 
 class PracticeResult : ComponentActivity() {
     private lateinit var score:TextView
@@ -47,11 +52,16 @@ class PracticeResult : ComponentActivity() {
         val lastScore = sharedPreferences.getInt("lastscore",0)
         val lastGame = intent.getStringExtra("game")
         val count = sharedPreferences.getInt("count", 0)
-        var scoresList = mutableListOf<String>()
+        //var scoresList = mutableListOf<String>()
 
-        if (lastGame != null) {
+
+        /*if (lastGame != null) {
            scoresList= showBest(lastGame,lastScore,sharedPreferences)!!
-        }
+        }*/
+
+        val scores = addScore("test","Popeye5",3,sharedPreferences)
+        val adapter = ScoreAdapter(this, R.layout.score_listview, scores)
+
 
         // Récupérer les scores depuis les SharedPreferences et les ajouter à la liste
         //or (i in 1..count) {
@@ -61,15 +71,14 @@ class PracticeResult : ComponentActivity() {
 
         // Tri des scores en ordre décroissant
         //scoresList.sortDescending()
-
         // Afficher les 5 meilleurs scores dans une ListView
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, scoresList.take(5))
+        //val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, scoresList.take(5))
         scoreList.adapter = adapter
 
         // Ajouter le score actuel à la liste des scores
-        if (scoreActivity != null) {
-            scoresList.add(scoreActivity.split("/")[0])
-        }
+        //if (scoreActivity != null) {
+        //    scoresList.add(scoreActivity.split("/")[0])
+        //}
 
         // Enregistrer la nouvelle liste des scores dans les SharedPreferences
         //val scoresListString = scoresList.joinToString(",")
@@ -123,23 +132,49 @@ class PracticeResult : ComponentActivity() {
         return scoreList
     }
 
+    fun addScore(game: String, player: String, score: Int, preferences: SharedPreferences) : MutableList<Pair<String, Int>> {
+        var scores = preferences.getString(game, null)?.let {
+            Log.i(it, "Scores from SharedPreferences:")
+            try {
+                Gson().fromJson<List<Pair<String, Int>>>(it, object : TypeToken<List<Pair<String, Int>>>() {}.type).toMutableList()
+            } catch (e: Exception) {
+                Log.i("Boobybooby","")
+                null
+            }
+        } ?: mutableListOf<Pair<String, Int>>()
+        Log.i(scores.toString(),"1")
+        scores[0] = Pair(scores[0].first, scores[0].second.toInt())
+
+        for (i in 0 until scores.size ){
+            scores[i] = Pair(scores[i].first, scores[i].second.toInt())
+        }
+
+        scores.add(Pair(player, score))
+        Log.i(scores.toString(),"2")
+        scores.sortByDescending { it.second }
+        Log.i("3",scores.toString())
+        if (scores.size > 5) {
+            scores.removeLast()
+        }
+        val json = Gson().toJson(scores)
+        Log.i("json",json.toString())
+        preferences.edit().putString(game, json).apply()
+        return scores
+    }
+
+
+
+
+
 }
 
-
-
-/*class ScoreAdapter(context: Context, scores: Map<String, Int>) : ArrayAdapter<String>(context, 0) {
-
-    private val sortedScores = scores.toList().sortedByDescending { (_, value) -> value }.toMap()
-
-    override fun getCount(): Int {
-        return sortedScores.size
-    }
+class ScoreAdapter(context: Context, resource: Int, scores: List<Pair<String, Int>>) : ArrayAdapter<Pair<String, Int>>(context, resource, scores) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = convertView ?: LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_2, parent, false)
-        val entry = sortedScores.entries.elementAt(position)
-        view.findViewById<TextView>(android.R.id.text1).text = entry.key
-        view.findViewById<TextView>(android.R.id.text2).text = entry.value.toString()
+        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.score_listview, parent, false)
+        val score = getItem(position)
+        view.findViewById<TextView>(R.id.textview_pseudo).text = score?.first
+        view.findViewById<TextView>(R.id.textview_score).text = score?.second.toString()
         return view
     }
-}*/
+}
