@@ -27,5 +27,11 @@
         android:layout_gravity="center_horizontal"
         android:text="Retour"
         android:layout_marginTop="100dp" />
-
+    <ListView
+        android:id="@+id/scoreList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:divider="@null"
+        android:dividerHeight="0dp" />
 </LinearLayout>

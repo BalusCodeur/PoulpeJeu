@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    android:initialExpandedChildrenCount="6">
+
+    <Preference
+        android:title="Game 1">
+        <EditTextPreference
+            android:key="game1_scores"
+            android:title="Scores"
+            android:summary="Enter scores separated by commas" />
+    </Preference>
+
+    <Preference
+        android:title="Game 2">
+        <EditTextPreference
+            android:key="game2_scores"
+            android:title="Scores"
+            android:summary="Enter scores separated by commas" />
+    </Preference>
+</PreferenceScreen>

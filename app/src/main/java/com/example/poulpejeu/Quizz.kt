@@ -5,10 +5,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import kotlinx.coroutines.delay
-
 
 class Quizz : ComponentActivity() {
 
@@ -17,6 +16,7 @@ class Quizz : ComponentActivity() {
     private lateinit var button1: Button
     private lateinit var button2: Button
     private lateinit var button3: Button
+    private lateinit var jean : ImageView
 
     private var questions = listOf<Question>()
     private var currentQuestionIndex = 0
@@ -41,6 +41,9 @@ class Quizz : ComponentActivity() {
 
         // Initialize first question
         setQuestion(questions[currentQuestionIndex])
+
+        jean = findViewById(R.id.jeanluc)
+        jean.setImageResource(R.drawable.jeanluc)
     }
 
     private fun setQuestion(question: Question) {
@@ -51,9 +54,9 @@ class Quizz : ComponentActivity() {
         button3.text = question.options[2]
 
         // Reset answer buttons' background colors
-        button1.setBackgroundResource(android.R.drawable.btn_default)
-        button2.setBackgroundResource(android.R.drawable.btn_default)
-        button3.setBackgroundResource(android.R.drawable.btn_default)
+        button1.setBackgroundResource(R.color.purple_500)
+        button2.setBackgroundResource(R.color.purple_500)
+        button3.setBackgroundResource(R.color.purple_500)
 
         // Set click listeners for answer buttons
         button1.setOnClickListener {
@@ -107,25 +110,34 @@ class Quizz : ComponentActivity() {
     }
 
 
-            fun showScore() {
-                // Show score in a toast message
-                val score = "$score/${questions.size}";
+    fun showScore() {
+        // Show score in a toast message
+        val scorestr = "$score/${questions.size}"
 
-                if (intent.getIntExtra("mode", 0) == 0) {
-                    val intent = Intent(this, PracticeResult::class.java)
-                    intent.putExtra("score", score)
-                    startActivity(intent)
-                } else {
-                    val bundle = intent.extras
-                    val intent = Intent(this, PlayResult::class.java)
-                    if (bundle != null) {
-                        bundle.putString("score", score)
-                        intent.putExtras(bundle)
-                    }
-                    startActivity(intent)
-                }
-                finish()
+
+        if (intent.getIntExtra("mode", 0) == 0) {
+            val intent = Intent(this, PracticeResult::class.java)
+            intent.putExtra("score", scorestr)
+            intent.putExtra("game","Quiz")
+            val prefs = getSharedPreferences("scores", MODE_PRIVATE)
+            val editor = prefs.edit()
+
+            // Enregistrer le score dans les SharedPreferences sous forme de chaîne
+            editor.putInt("lastscore", score)
+            //editor.putString("scoreQuiz","1,4,2,3,5")
+            editor.apply()
+            startActivity(intent)
+        } else {
+            val bundle = intent.extras
+            val intent = Intent(this, PlayResult::class.java)
+            if (bundle != null) {
+                bundle.putString("score", scorestr)
+                intent.putExtras(bundle)
             }
+            startActivity(intent)
+        }
+        finish()
+    }
 
             fun resetQuiz() {
             // Reset current question index and score

@@ -50,7 +50,7 @@ class Question(val question: String, var options: List<String>, val answer: Stri
                 "Nord-Pas de Calais"
             ),
             Question(
-                "En moyenne combien de kilogrammes de fromage consomme un français pendant 1 an ?",
+                "En moyenne combien de kilogrammes de fromage consomme un français en 1 an ?",
                 listOf("24,6 kg", "17,3 kg", "15,7 kg"),
                 "24,6 kg"
             ),
