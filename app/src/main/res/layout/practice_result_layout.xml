@@ -2,13 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/wallpaper2">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:layout_gravity="center_horizontal"
         android:text="Votre score"
+        android:textColor="@color/black"
         android:textSize="40sp"
         android:fontFamily="@font/squidfont">
     </TextView>
@@ -18,7 +20,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textSize="40sp"
-        android:fontFamily="@font/squidfont">
+        android:fontFamily="@font/squidfont"
+        android:textColor="@color/black"
+        >
     </TextView>
     <Button
         android:id="@+id/backButton"
@@ -26,12 +30,32 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Retour"
-        android:layout_marginTop="100dp" />
+        android:layout_marginTop="100dp"
+        android:textColor="@color/black"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Meilleurs scores"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:background="@color/squidpink"
+        android:textColor="@color/black"
+        android:fontFamily="@font/neonfont"
+        ></TextView>
     <ListView
         android:id="@+id/scoreList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+
         android:divider="@null"
-        android:dividerHeight="0dp" />
+        android:dividerHeight="0dp"
+        android:background="@color/squidpink"
+        android:textColor="@color/black"
+        android:fontFamily="@font/neonfont"
+
+
+        />
 </LinearLayout>

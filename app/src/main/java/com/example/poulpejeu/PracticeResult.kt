@@ -9,18 +9,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
 import com.google.gson.Gson
+import kotlin.math.log
 
 class PracticeResult : ComponentActivity() {
     private lateinit var score:TextView
     private lateinit var back:Button
     private lateinit var scoreList: ListView
+    private var adapter: ScoreAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,82 +35,95 @@ class PracticeResult : ComponentActivity() {
         // Afficher le score dans le TextView
         score.text = scoreActivity
 
-
-
-        /*when (intent.getStringExtra("game")){
-            "quiz" ->{
-                if (scoreActivity != null) {
-                    //quizScore(scoreActivity)
-                }
-            }
-            "biscuit" ->{}
-            "soleil" ->{}
-            "bridge" ->{}
-        }*/
-
         val sharedPreferences = getSharedPreferences("scores", Context.MODE_PRIVATE)
         val lastScore = sharedPreferences.getInt("lastscore",0)
         val lastGame = intent.getStringExtra("game")
-        val count = sharedPreferences.getInt("count", 0)
-        //var scoresList = mutableListOf<String>()
+
+        if(lastGame=="Quiz") {
+            val scores = addScore(lastGame!!, lastScore, sharedPreferences, this)
+            adapter = ScoreAdapter(this, R.layout.score_listview, scores)
+            scoreList.adapter = adapter
+        }
 
 
-        /*if (lastGame != null) {
-           scoresList= showBest(lastGame,lastScore,sharedPreferences)!!
-        }*/
-
-        val scores = addScore("test","Popeye5",3,sharedPreferences)
-        val adapter = ScoreAdapter(this, R.layout.score_listview, scores)
 
 
-        // Récupérer les scores depuis les SharedPreferences et les ajouter à la liste
-        //or (i in 1..count) {
-        //    val score = sharedPreferences.getInt("score$i", 0)
-        //    scoresList.add(score.toString())
-        //}
-
-        // Tri des scores en ordre décroissant
-        //scoresList.sortDescending()
-        // Afficher les 5 meilleurs scores dans une ListView
-        //val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, scoresList.take(5))
-        scoreList.adapter = adapter
-
-        // Ajouter le score actuel à la liste des scores
-        //if (scoreActivity != null) {
-        //    scoresList.add(scoreActivity.split("/")[0])
-        //}
-
-        // Enregistrer la nouvelle liste des scores dans les SharedPreferences
-        //val scoresListString = scoresList.joinToString(",")
-        //sharedPreferences.edit().putString("scoresList", scoresListString).apply()
 
         back.setOnClickListener { finish() }
+    }
+
+    fun addScore(game: String, score: Int, preferences: SharedPreferences,context: Context) : MutableList<Pair<String, Int>> {
+        var scores = preferences.getString(game, null)?.let {
+            Log.i(it, "Scores from SharedPreferences:")
+            try {
+                Gson().fromJson<List<Pair<String, Int>>>(it, object : TypeToken<List<Pair<String, Int>>>() {}.type).toMutableList()
+            } catch (e: Exception) {
+                Log.i("Boobybooby","")
+                null
+            }
+        } ?: mutableListOf<Pair<String, Int>>()
+        Log.i(scores.toString(),"1")
+
+        for (i in 0 until scores.size ){
+            scores[i] = Pair(scores[i].first, scores[i].second.toInt())
+        }
+
+        // Vérifier si le score est suffisamment élevé pour demander le pseudo du joueur
+        if (scores.size<5 || score > scores.lastOrNull()?.second ?: 0) {
+            // Créer une vue pour la fenêtre popup
+            val popupView = LayoutInflater.from(context).inflate(R.layout.addpseudo_popup, null)
+
+            // Trouver les éléments de la vue
+            val input = popupView.findViewById<EditText>(R.id.edittext_pseudo)
+            val submitButton = popupView.findViewById<Button>(R.id.button_save)
+
+            // Créer la fenêtre popup
+            val popup = AlertDialog.Builder(context)
+                .setView(popupView)
+                .create()
+
+            // Ajouter un listener pour le bouton de soumission
+            submitButton.setOnClickListener {
+                // Récupérer le pseudo saisi
+                val playerName = input.text.toString()
+
+                // Ajouter le nouveau score avec le pseudo saisi
+                Log.i("zizi",scores.toString())
+                scores.add(Pair(playerName, score))
+                Log.i("pipi",scores.toString())
+
+                scores.sortByDescending { it.second }
+                if (scores.size > 5) {
+                    scores.removeLast()
+                }
+
+                // Enregistrer les scores mis à jour dans les SharedPreferences
+                val json = Gson().toJson(scores)
+                Log.i("json",json.toString())
+                preferences.edit().putString(game, json).apply()
+
+                adapter?.notifyDataSetChanged()
+
+                // Fermer la fenêtre popup
+                popup.dismiss()
+            }
+
+            // Afficher la fenêtre popup
+            popup.show()
+        } else {
+            // Enregistrer les scores dans les SharedPreferences sans demander le pseudo du joueur
+            val json = Gson().toJson(scores)
+            Log.i("json",json.toString())
+            preferences.edit().putString(game, json).apply()
+        }
+        Log.i(scores.toString(),"hahaha")
+        return scores
     }
 
 
 
 
 
-    /*fun quizScore(score: String){
-        // Récupération des Shared Preferences pour le jeu 1
-        val sharedPref = getSharedPreferences("quiz", Context.MODE_PRIVATE)
-        val playerName = "John Doe"
-        val score = 100
-        val editor = sharedPref.edit()
-        editor.putString(playerName, score.toString())
-        editor.apply()
-        val allScores = sharedPref.all
-        for ((playerName, score) in allScores) {
-            Log.d("MyGame", "$playerName: $score")
-        }
-        //scoreList.adapter = ScoreAdapter(this, allScores as Map<String, Int>)
-        //val topScores = mutableListOf<Pair<String, Long>>()
-
-        /*val scoreList = sharedPreferences.getStringSet("scoreList", setOf())?.map {
-            val (score, pseudo) = it.split(",")
-            score.toInt() to pseudo
-        }?.toMutableList() ?: mutableListOf()*/
-    }*/
 
     fun showBest(game: String, lastscore: Int,preferences: SharedPreferences) : MutableList<String>? {
         var scoreList = preferences.getString("score"+game,"")?.split(",")?.sortedDescending()?.toMutableList()
@@ -132,40 +145,16 @@ class PracticeResult : ComponentActivity() {
         return scoreList
     }
 
-    fun addScore(game: String, player: String, score: Int, preferences: SharedPreferences) : MutableList<Pair<String, Int>> {
-        var scores = preferences.getString(game, null)?.let {
-            Log.i(it, "Scores from SharedPreferences:")
-            try {
-                Gson().fromJson<List<Pair<String, Int>>>(it, object : TypeToken<List<Pair<String, Int>>>() {}.type).toMutableList()
-            } catch (e: Exception) {
-                Log.i("Boobybooby","")
-                null
-            }
-        } ?: mutableListOf<Pair<String, Int>>()
-        Log.i(scores.toString(),"1")
-        scores[0] = Pair(scores[0].first, scores[0].second.toInt())
-
-        for (i in 0 until scores.size ){
-            scores[i] = Pair(scores[i].first, scores[i].second.toInt())
+    private fun updateScoreList(scores: MutableList<Pair<String, Int>>) {
+        if (adapter == null) {
+            adapter = ScoreAdapter(this, R.layout.score_listview, scores)
+            scoreList.adapter = adapter
+        } else {
+            adapter?.clear()
+            adapter?.addAll(scores)
+            adapter?.notifyDataSetChanged()
         }
-
-        scores.add(Pair(player, score))
-        Log.i(scores.toString(),"2")
-        scores.sortByDescending { it.second }
-        Log.i("3",scores.toString())
-        if (scores.size > 5) {
-            scores.removeLast()
-        }
-        val json = Gson().toJson(scores)
-        Log.i("json",json.toString())
-        preferences.edit().putString(game, json).apply()
-        return scores
     }
-
-
-
-
-
 }
 
 class ScoreAdapter(context: Context, resource: Int, scores: List<Pair<String, Int>>) : ArrayAdapter<Pair<String, Int>>(context, resource, scores) {
@@ -178,3 +167,4 @@ class ScoreAdapter(context: Context, resource: Int, scores: List<Pair<String, In
         return view
     }
 }
+

@@ -95,8 +95,8 @@ class Biscuit: ComponentActivity() {
     }
 
     fun initGame(){
-        //val randomNumber = Random.nextInt(3)
-        val randomNumber = 2
+        val randomNumber = Random.nextInt(3)
+
         when (randomNumber){
             0 -> circle()
             1 -> square()
