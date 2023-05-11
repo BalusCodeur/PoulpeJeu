@@ -118,7 +118,6 @@ class PracticeResult : ComponentActivity() {
             scoreList = scoreList?.sortedDescending()?.toMutableList()
             editor.putString("score"+game,scoreList?.joinToString(","))
             editor.apply()
-            //Log.i(scoreList?.joinToString(","),"OK")
         }
 
         return scoreList

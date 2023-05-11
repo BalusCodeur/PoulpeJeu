@@ -1,18 +1,14 @@
 package com.example.poulpejeu
 
-import android.animation.ValueAnimator
+import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.animation.Animation
-import android.view.animation.LinearInterpolator
-import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GestureDetectorCompat
-import com.example.poulpejeu.R
 import kotlin.math.roundToInt
 
 class RopeGame : ComponentActivity(), GestureDetector.OnGestureListener {
@@ -23,6 +19,7 @@ class RopeGame : ComponentActivity(), GestureDetector.OnGestureListener {
     private var dpi = 0
     private lateinit var distanceText: TextView
     private lateinit var corde: ImageView
+    private lateinit var timeLeft: TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,11 +36,48 @@ class RopeGame : ComponentActivity(), GestureDetector.OnGestureListener {
 
         gestureDetector = GestureDetectorCompat(this, this)
         gestureDetector.setIsLongpressEnabled(false)
+        timeLeft = findViewById(R.id.chrono)
 
         corde = findViewById<ImageView>(R.id.cordeview)
 
+        object : CountDownTimer(20000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                // Mise à jour de l'affichage du temps restant
+                val secondsLeft = millisUntilFinished / 1000
+                // Par exemple, vous pouvez mettre à jour un TextView avec le temps restant :
+                timeLeft.text = "$secondsLeft"
+            }
+
+            override fun onFinish() {
+                // La minuterie est terminée, vous pouvez appeler votre fonction end ici
+                //end()
+                showScore()
+
+            }
+        }.start()
 
 
+    }
+
+
+    fun showScore() {
+        val score = ((totalDistance * 10.0).roundToInt()/10.0).toString() + " cm"
+        val bundle = intent.extras
+        if(intent.getIntExtra("mode",0)==0) {
+            val intent = Intent(this, PracticeResult::class.java)
+            intent.putExtra("score", score)
+            startActivity(intent)
+            finish()
+        }else {
+            val intent = Intent(this,PlayResult::class.java)
+            intent.putExtra("score", score)
+            if (bundle != null) {
+                intent.putExtras(bundle)
+            }
+            startActivity(intent)
+            finish()
+        }
+        //end = true
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
