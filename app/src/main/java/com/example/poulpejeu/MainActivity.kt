@@ -11,14 +11,18 @@ import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import com.example.poulpejeu.P2P.MessageDataHolder
+import com.example.poulpejeu.P2P.MessageTransferService
+import com.example.poulpejeu.P2P.Server
 import com.example.poulpejeu.P2P.WifiDirectActivity
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var title: ImageView
     private lateinit var bandeSon: MediaPlayer
-    private lateinit var buttonPlay: Button
     private lateinit var buttonPractice: Button
+    private lateinit var buttonP2P: Button
 
     private val activityList = listOf(
         ShoutGame::class.java,
@@ -31,19 +35,26 @@ class MainActivity : ComponentActivity() {
     private var currentIndex = 0
 
 
-
     private val RECORD_AUDIO_PERMISSION_REQUEST_CODE = 1
+
     // Demander l'autorisation à l'utilisateur
     private fun requestRecordAudioPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-            != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO),
-                RECORD_AUDIO_PERMISSION_REQUEST_CODE)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.RECORD_AUDIO),
+                RECORD_AUDIO_PERMISSION_REQUEST_CODE
+            )
         }
     }
 
     // Gérer la réponse de l'utilisateur à la demande d'autorisation
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             RECORD_AUDIO_PERMISSION_REQUEST_CODE -> {
@@ -63,9 +74,11 @@ class MainActivity : ComponentActivity() {
         setContentView(R.layout.home_menu_layout)
 
         title = findViewById(R.id.poulpejeu)
-        bandeSon = MediaPlayer.create(this,R.raw.bandeson)
-        buttonPlay = findViewById(R.id.playButton)
+        bandeSon = MediaPlayer.create(this, R.raw.bandeson)
         buttonPractice = findViewById(R.id.practiceButton)
+        buttonP2P = findViewById(R.id.P2PButton)
+
+
 
         title.setImageResource(R.drawable.poulpejeu)
 
@@ -74,17 +87,9 @@ class MainActivity : ComponentActivity() {
         bandeSon.start()
 
 
-        buttonPlay.setOnClickListener {
+        buttonP2P.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
-            //val randomActivities = activityList.shuffled().take(3)
-            val randomActivities = listOf(Quizz::class.java,Biscuit::class.java,BridgeGame::class.java)
-            val bundle = Bundle()
-            bundle.putSerializable("randomActivities", ArrayList(randomActivities))
-            bundle.putInt("currentIndex", 0)
-            val intent = Intent(this, randomActivities[0])
-            intent.putExtra("mode",1)
-            Log.i("bundle",bundle.toString())
-            intent.putExtras(bundle)
+            val intent = Intent(this, WifiDirectActivity::class.java)
             startActivity(intent)
         }
 
@@ -96,6 +101,7 @@ class MainActivity : ComponentActivity() {
 
         requestRecordAudioPermission()
     }
+
     override fun onPause() {
         super.onPause()
         bandeSon.pause()
@@ -106,10 +112,5 @@ class MainActivity : ComponentActivity() {
         bandeSon.start()
     }
 
-    private fun startNextActivity(randomActivities: List<Class<*>>) {
-        val nextActivity = randomActivities[currentIndex]
-        val intent = Intent(this, nextActivity)
-        //startActivityForResult(intent, RESULT_CODE)
-    }
 
 }

@@ -85,7 +85,6 @@ class WifiDirectActivity : AppCompatActivity(), ChannelListener,
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wifi_direct)
@@ -117,7 +116,7 @@ class WifiDirectActivity : AppCompatActivity(), ChannelListener,
     /** register the BroadcastReceiver with the intent values to be matched  */
     public override fun onResume() {
         super.onResume()
-        receiver = channel?.let { MyReceiver(manager, it, this) }
+        receiver = MyReceiver(manager, channel, this)
         registerReceiver(receiver, intentFilter)
     }
 
@@ -133,7 +132,7 @@ class WifiDirectActivity : AppCompatActivity(), ChannelListener,
     fun resetData() {
         val fragmentList = fragmentManager
             .findFragmentById(R.id.frag_list) as DeviceListFragment
-        val fragmentDetails: DeviceDetailFragment = fragmentManager
+        val fragmentDetails = fragmentManager
             .findFragmentById(R.id.frag_detail) as DeviceDetailFragment
         fragmentList.clearPeers()
         fragmentDetails.resetViews()
@@ -201,12 +200,10 @@ class WifiDirectActivity : AppCompatActivity(), ChannelListener,
         }
     }
 
-    override fun showDetails(device: WifiP2pDevice?) {
-        val fragment: DeviceDetailFragment = fragmentManager
+    override fun showDetails(device: WifiP2pDevice) {
+        val fragment = fragmentManager
             .findFragmentById(R.id.frag_detail) as DeviceDetailFragment
-        if (device != null) {
-            fragment.showDetails(device)
-        }
+        fragment.showDetails(device)
     }
 
     override fun connect(config: WifiP2pConfig?) {
@@ -232,19 +229,16 @@ class WifiDirectActivity : AppCompatActivity(), ChannelListener,
     }
 
     override fun disconnect() {
-        val fragment: DeviceDetailFragment = fragmentManager
+        val fragment = fragmentManager
             .findFragmentById(R.id.frag_detail) as DeviceDetailFragment
         fragment.resetViews()
         manager!!.removeGroup(channel, object : WifiP2pManager.ActionListener {
             override fun onFailure(reasonCode: Int) {
-                Log.d(
-                    TAG,
-                    "Disconnect failed. Reason :$reasonCode"
-                )
+                Log.d(TAG, "Disconnect failed. Reason :$reasonCode")
             }
 
             override fun onSuccess() {
-                fragment.getView()?.setVisibility(View.GONE)
+                fragment.view!!.visibility = View.GONE
             }
         })
     }

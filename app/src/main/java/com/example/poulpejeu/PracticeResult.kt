@@ -35,7 +35,7 @@ class PracticeResult : ComponentActivity() {
         // Afficher le score dans le TextView
         score.text = scoreActivity
 
-        val sharedPreferences = getSharedPreferences("scores", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("scores", MODE_PRIVATE)
         val lastScore = sharedPreferences.getInt("lastscore",0)
         val lastGame = intent.getStringExtra("game")
 

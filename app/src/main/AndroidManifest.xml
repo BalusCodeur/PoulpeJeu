@@ -25,7 +25,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.PoulpeJeu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -68,6 +67,7 @@
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
+
         <activity
             android:name=".PracticeResult"
             android:exported="true"
@@ -83,5 +83,12 @@
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
+        <activity
+            android:name=".StartMenu"
+            android:exported="true"
+            android:theme="@style/Theme.PoulpeJeu">
+        </activity>
+
+        <service android:enabled="true" android:name=".P2P.MessageTransferService" />
     </application>
 </manifest>

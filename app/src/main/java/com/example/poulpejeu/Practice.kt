@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import androidx.activity.ComponentActivity
-import com.example.poulpejeu.P2P.WifiDirectActivity
 
 class Practice : ComponentActivity() {
 
@@ -18,7 +17,6 @@ class Practice : ComponentActivity() {
     private lateinit var buttonBiscuit: Button
     private lateinit var buttonBridge: Button
     private lateinit var buttonRope: Button
-    private lateinit var buttonP2P: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +30,6 @@ class Practice : ComponentActivity() {
         buttonBiscuit = findViewById(R.id.biscuitButton)
         buttonBridge = findViewById(R.id.bridgeButton)
         buttonRope = findViewById(R.id.ropeButton)
-        buttonP2P = findViewById(R.id.P2PButton)
 
         title.setImageResource(R.drawable.poulpejeu)
 
@@ -80,12 +77,7 @@ class Practice : ComponentActivity() {
             intent.putExtra("mode",0)
             startActivity(intent)
         }
-        buttonP2P.setOnClickListener {
-            // Créez une Intent pour ouvrir votre nouvelle page
-            val intent = Intent(this, WifiDirectActivity::class.java)
-            intent.putExtra("mode",0)
-            startActivity(intent)
-        }
+
     }
     override fun onPause() {
         super.onPause()

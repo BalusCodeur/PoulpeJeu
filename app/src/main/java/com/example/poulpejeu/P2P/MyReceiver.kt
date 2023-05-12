@@ -1,9 +1,7 @@
 package com.example.poulpejeu.P2P
 
 import android.Manifest
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.content.pm.PackageManager
 import android.net.NetworkInfo
 import android.net.wifi.p2p.WifiP2pManager
@@ -13,14 +11,13 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.example.poulpejeu.R
 
-
 class MyReceiver
 /**
  * @param manager WifiP2pManager system service
  * @param channel Wifi p2p channel
  * @param activity activity associated with the receiver
  */(
-    private val manager: WifiP2pManager?, private val channel: WifiP2pManager.Channel,
+    private val manager: WifiP2pManager?, private val channel: WifiP2pManager.Channel?,
     private val activity: WifiDirectActivity
 ) : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -63,10 +60,6 @@ class MyReceiver
             }
             Log.d(WifiDirectActivity.TAG, "P2P peers changed")
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION == action) {
-
-            // Connection state changed! We should probably do something about
-            // that.
-        } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION == action) {
             if (manager == null) {
                 return
             }
@@ -75,7 +68,7 @@ class MyReceiver
             if (networkInfo != null && networkInfo.isConnected) {
                 // we are connected with the other device, request connection
                 // info to find group owner IP
-                val fragment: DeviceDetailFragment = activity
+                val fragment = activity
                     .fragmentManager.findFragmentById(R.id.frag_detail) as DeviceDetailFragment
                 manager.requestConnectionInfo(channel, fragment)
             } else {
