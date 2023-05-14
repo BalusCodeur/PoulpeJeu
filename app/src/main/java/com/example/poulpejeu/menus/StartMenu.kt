@@ -1,11 +1,10 @@
-package com.example.poulpejeu
+package com.example.poulpejeu.menus
 
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,10 +12,11 @@ import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import com.example.poulpejeu.GameHandler
 import com.example.poulpejeu.P2P.MessageDataHolder
 import com.example.poulpejeu.P2P.MessageTransferService
 import com.example.poulpejeu.P2P.Server
-import com.example.poulpejeu.P2P.WifiDirectActivity
+import com.example.poulpejeu.R
 
 class StartMenu() : ComponentActivity(), Server.ServerCallback, MessageTransferService.ServerResponseCallback {
 
@@ -57,7 +57,7 @@ class StartMenu() : ComponentActivity(), Server.ServerCallback, MessageTransferS
         setContentView(R.layout.start_menu_layout)
 
         title = findViewById(R.id.poulpejeu)
-        bandeSon = MediaPlayer.create(this,R.raw.bandeson)
+        bandeSon = MediaPlayer.create(this, R.raw.bandeson)
         buttonPlay = findViewById(R.id.playButton)
         waiting = findViewById(R.id.waiting)
         waiting.isVisible = false
@@ -112,6 +112,7 @@ class StartMenu() : ComponentActivity(), Server.ServerCallback, MessageTransferS
     override fun onServerRequestReceived(request: String) {
         runOnUiThread {
             if(request == "start"){
+                GameHandler.practiceMode = false
                 val intent = Intent(this, GameHandler.activityMap[GameHandler.games[0]])
                 startActivity(intent)
             }
@@ -122,6 +123,7 @@ class StartMenu() : ComponentActivity(), Server.ServerCallback, MessageTransferS
     override fun onServerResponseReceived(response: String) {
         runOnUiThread {
             if(response == "start"){
+                GameHandler.practiceMode = false
                 val intent = Intent(this, GameHandler.activityMap[GameHandler.games[0]])
                 startActivity(intent)
             }

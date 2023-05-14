@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".RopeGame">
+        tools:context=".games.RopeGame">
 
         <TextView
             android:id="@+id/dead"
@@ -25,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button0_0"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -34,7 +34,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button0_1"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -43,7 +43,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button1_0"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -52,7 +52,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button0_0"/>
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button1_1"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -61,7 +61,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button0_1"/>
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button2_0"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -70,7 +70,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button1_0"/>
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button2_1"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -79,7 +79,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button1_1"/>
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button3_0"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -88,7 +88,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button2_0"/>
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button3_1"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -97,7 +97,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button2_1"/>
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button4_0"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -106,7 +106,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button3_0"/>
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button4_1"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -115,7 +115,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button3_1"/>
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button5_0"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -124,7 +124,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button4_0"/>
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button5_1"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -133,7 +133,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button4_1"/>
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button6_0"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -142,7 +142,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button5_0"/>
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button6_1"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -151,7 +151,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button5_1"/>
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button7_0"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -160,7 +160,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button6_0"/>
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button7_1"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -169,7 +169,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button6_1"/>
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button8_0"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -178,7 +178,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button7_0"/>
 
-        <com.example.poulpejeu.GlassButton
+        <com.example.poulpejeu.games.GlassButton
             android:id="@+id/button8_1"
             android:layout_width="70dp"
             android:layout_height="70dp"

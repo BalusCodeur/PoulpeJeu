@@ -1,8 +1,7 @@
-package com.example.poulpejeu
+package com.example.poulpejeu.menus
 
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -12,14 +11,15 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AlertDialog
+import com.example.poulpejeu.R
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
 import com.google.gson.Gson
-import kotlin.math.log
 
 class PracticeResult : ComponentActivity() {
     private lateinit var score:TextView
     private lateinit var back:Button
     private lateinit var scoreList: ListView
+    private lateinit var title: ImageView
     private var adapter: ScoreAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +28,9 @@ class PracticeResult : ComponentActivity() {
         score = findViewById(R.id.score)
         back = findViewById(R.id.backButton)
         scoreList = findViewById(R.id.scoreList)
+        title = findViewById(R.id.score_title)
+
+        title.setImageResource(R.drawable.score)
 
         // Récupérer le score depuis l'intent
         val scoreActivity = intent.getStringExtra("score")

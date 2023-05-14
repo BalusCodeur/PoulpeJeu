@@ -1,4 +1,4 @@
-package com.example.poulpejeu
+package com.example.poulpejeu.games
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -15,11 +15,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.core.view.isVisible
+import com.example.poulpejeu.GameHandler
+import com.example.poulpejeu.menus.PracticeResult
+import com.example.poulpejeu.R
 import java.util.concurrent.TimeUnit
 import kotlin.math.*
 import kotlin.random.Random
 
-class Biscuit: ComponentActivity() {
+class BiscuitGame: ComponentActivity() {
     private lateinit var circleView: CircleView
     private lateinit var starView: StarView
     private lateinit var squareView: SquareView
@@ -143,7 +146,7 @@ class Biscuit: ComponentActivity() {
 
 
 class CircleView(context: Context) : View(context) {
-    private lateinit var biscuitActivity: Biscuit
+    private lateinit var biscuitActivity: BiscuitGame
     var centerX = 0f
     var centerY = 0f
     val smallRadius = 425f
@@ -272,12 +275,12 @@ class CircleView(context: Context) : View(context) {
     }
 
 
-    fun setBiscuitActivity(activity: Biscuit) {
+    fun setBiscuitActivity(activity: BiscuitGame) {
         biscuitActivity = activity
     }
 }
 class SquareView(context: Context?) : View(context) {
-    private lateinit var biscuitActivity: Biscuit
+    private lateinit var biscuitActivity: BiscuitGame
 
     private val smallSquareSize = 750f
     private val mediumSquareSize = 850f
@@ -446,12 +449,12 @@ class SquareView(context: Context?) : View(context) {
         return circumference - distance  < 0f && sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2))<30f
     }
 
-    fun setBiscuitActivity(activity: Biscuit) {
+    fun setBiscuitActivity(activity: BiscuitGame) {
         biscuitActivity = activity
     }
 }
 class StarView(context: Context?) : View(context) {
-    private lateinit var biscuitActivity: Biscuit
+    private lateinit var biscuitActivity: BiscuitGame
 
     // Définir la taille des étoiles
     val largeStarSize =  1100f
@@ -634,7 +637,7 @@ class StarView(context: Context?) : View(context) {
         return circumference - distance  < 0f && sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2))<30f
     }
 
-    fun setBiscuitActivity(activity: Biscuit) {
+    fun setBiscuitActivity(activity: BiscuitGame) {
         biscuitActivity = activity
     }
 }

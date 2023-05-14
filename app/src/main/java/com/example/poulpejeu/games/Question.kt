@@ -1,4 +1,4 @@
-package com.example.poulpejeu
+package com.example.poulpejeu.games
 
 class Question(val question: String, var options: List<String>, val answer: String) {
 

@@ -3,14 +3,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.wifi.p2p.WifiP2pInfo
-import androidx.core.content.ContextCompat.startActivity
 import com.example.poulpejeu.P2P.Message
 import com.example.poulpejeu.P2P.MessageTransferService
 import com.example.poulpejeu.P2P.Server
-import com.example.poulpejeu.P2P.WifiDirectActivity
-import com.example.poulpejeu.Result
+import com.example.poulpejeu.games.*
+import com.example.poulpejeu.menus.ClassicResultMenu
 import com.google.gson.Gson
-import kotlinx.coroutines.delay
 import kotlin.random.Random
 
 object GameHandler {
@@ -43,12 +41,12 @@ object GameHandler {
 
     val activityMap = mutableMapOf<Int, Class<out Activity>>()
 init {
-    activityMap[QUIZZ] = Quizz::class.java
+    activityMap[QUIZZ] = QuizzGame::class.java
     activityMap[SHOUT] = ShoutGame::class.java
     activityMap[ROPE] = RopeGame::class.java
     activityMap[BRIDGE] = BridgeGame::class.java
-    activityMap[BISCUIT] = Biscuit::class.java
-    activityMap[SOLEIL] = Soleil123::class.java
+    activityMap[BISCUIT] = BiscuitGame::class.java
+    activityMap[SOLEIL] = SoleilGame::class.java
 }
 
 
@@ -144,7 +142,7 @@ init {
         else{
             finished = true
             if(!isOwner!!){
-                val msg = Message("scores", scores[0],scores[1],scores[2])
+                val msg = Message("scores", scores[0], scores[1], scores[2])
 
                 val serviceIntent = Intent(
                     context,
@@ -162,7 +160,7 @@ init {
             else{
                 Thread.sleep(200)
             }
-            val intent = Intent(context, PlayResult::class.java)
+            val intent = Intent(context, ClassicResultMenu::class.java)
             context.startActivity(intent)
         }
     }

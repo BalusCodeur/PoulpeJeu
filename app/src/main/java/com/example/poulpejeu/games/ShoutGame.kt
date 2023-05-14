@@ -1,20 +1,15 @@
-package com.example.poulpejeu
+package com.example.poulpejeu.games
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Handler
 import androidx.activity.ComponentActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.example.poulpejeu.R
-import java.lang.Math.log10
-import android.util.Log
-import android.view.View
 import android.widget.*
 import androidx.core.view.isVisible
-import java.lang.Thread.sleep
+import com.example.poulpejeu.GameHandler
+import com.example.poulpejeu.menus.PracticeResult
 import kotlin.math.roundToInt
 
 class ShoutGame : ComponentActivity(){
@@ -34,7 +29,6 @@ class ShoutGame : ComponentActivity(){
         mRecorder.prepare()
 
 
-        val button: Button = findViewById(R.id.button)
         var volume = 0.0;
 
         val progressBar: ProgressBar = findViewById(R.id.progress_bar)
@@ -42,10 +36,10 @@ class ShoutGame : ComponentActivity(){
         progressBar.progress = 0
         progressBar.isVisible = false
 
-        var count: TextView = findViewById(R.id.count)
+        val count: TextView = findViewById(R.id.count)
         count.isVisible = false
 
-        var result: TextView = findViewById(R.id.result)
+        val result: TextView = findViewById(R.id.result)
         result.isVisible = false
 
 
@@ -70,6 +64,7 @@ class ShoutGame : ComponentActivity(){
         }
 
         fun startGame() {
+            mRecorder.start()
             val handler2 = Handler()
             handler2.post(object : Runnable {
                 override fun run() {
@@ -107,12 +102,7 @@ class ShoutGame : ComponentActivity(){
             }
         }
 
-
-        button.setOnClickListener {
-            mRecorder.start()
-            button.isVisible = false
-            count.isVisible = true
-            startCountdown(3)
-        }
+        count.isVisible = true
+        startCountdown(3)
     }
 }

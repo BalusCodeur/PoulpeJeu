@@ -1,4 +1,4 @@
-package com.example.poulpejeu
+package com.example.poulpejeu.games
 
 import android.content.Context
 import android.graphics.Color

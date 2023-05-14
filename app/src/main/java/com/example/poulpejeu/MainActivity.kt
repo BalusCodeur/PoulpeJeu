@@ -5,17 +5,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
-import com.example.poulpejeu.P2P.MessageDataHolder
-import com.example.poulpejeu.P2P.MessageTransferService
-import com.example.poulpejeu.P2P.Server
 import com.example.poulpejeu.P2P.WifiDirectActivity
+import com.example.poulpejeu.menus.PracticeMenu
 
 class MainActivity : ComponentActivity() {
 
@@ -87,7 +83,7 @@ class MainActivity : ComponentActivity() {
 
         buttonPractice.setOnClickListener {
             // Créez une Intent pour ouvrir votre nouvelle page
-            val intent = Intent(this, Practice::class.java)
+            val intent = Intent(this, PracticeMenu::class.java)
             startActivity(intent)
         }
 

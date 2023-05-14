@@ -1,4 +1,4 @@
-package com.example.poulpejeu
+package com.example.poulpejeu.games
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -19,8 +19,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.core.view.isVisible
+import com.example.poulpejeu.GameHandler
+import com.example.poulpejeu.menus.PracticeResult
+import com.example.poulpejeu.R
 
-class Soleil123 : ComponentActivity() {
+class SoleilGame : ComponentActivity() {
     private lateinit var fille: ImageView
     private lateinit var runner: ImageView
     private lateinit var tdm: ImageView

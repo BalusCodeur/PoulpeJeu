@@ -3,36 +3,24 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/wallpaper2">
-    <TextView
+    android:background="@drawable/wallpaper1">
+    <ImageView
+        android:id="@+id/score_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:layout_gravity="center_horizontal"
-        android:text="Votre score"
-        android:textColor="@color/black"
-        android:textSize="40sp"
-        android:fontFamily="@font/squidfont">
-    </TextView>
+        android:layout_marginTop="20dp"
+        android:padding="20dp"/>
     <TextView
         android:id="@+id/score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textSize="40sp"
-        android:fontFamily="@font/squidfont"
+        android:textSize="25sp"
+        android:fontFamily="@font/squaredfont"
         android:textColor="@color/black"
-        >
+        android:padding="20dp">
     </TextView>
-    <Button
-        android:id="@+id/backButton"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Retour"
-        android:layout_marginTop="100dp"
-        android:textColor="@color/black"
-        />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,7 +32,7 @@
         android:background="@color/squidpink"
         android:textColor="@color/black"
         android:fontFamily="@font/neonfont"
-        ></TextView>
+        />
     <ListView
         android:id="@+id/scoreList"
         android:layout_width="match_parent"
@@ -55,7 +43,15 @@
         android:background="@color/squidpink"
         android:textColor="@color/black"
         android:fontFamily="@font/neonfont"
-
-
+        android:padding="20dp"
+        />
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Retour"
+        android:layout_marginTop="100dp"
+        android:textColor="@color/black"
         />
 </LinearLayout>

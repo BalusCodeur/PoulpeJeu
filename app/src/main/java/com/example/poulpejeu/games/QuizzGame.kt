@@ -1,4 +1,4 @@
-package com.example.poulpejeu
+package com.example.poulpejeu.games
 
 import android.content.Intent
 import android.graphics.Color
@@ -8,8 +8,11 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import com.example.poulpejeu.GameHandler
+import com.example.poulpejeu.menus.PracticeResult
+import com.example.poulpejeu.R
 
-class Quizz : ComponentActivity() {
+class QuizzGame : ComponentActivity() {
 
     private lateinit var questionTextView: TextView
     private lateinit var result: TextView

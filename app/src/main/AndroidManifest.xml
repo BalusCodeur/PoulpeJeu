@@ -33,32 +33,32 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ShoutGame"
+            android:name=".games.ShoutGame"
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
         <activity
-            android:name=".Quizz"
+            android:name=".games.QuizzGame"
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
         <activity
-            android:name=".Soleil123"
+            android:name=".games.SoleilGame"
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
         <activity
-            android:name=".Biscuit"
+            android:name=".games.BiscuitGame"
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
         <activity
-            android:name=".BridgeGame"
+            android:name=".games.BridgeGame"
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
         <activity
-            android:name=".RopeGame"
+            android:name=".games.RopeGame"
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
@@ -69,22 +69,22 @@
         </activity>
 
         <activity
-            android:name=".PracticeResult"
+            android:name=".menus.PracticeResult"
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
         <activity
-            android:name=".PlayResult"
+            android:name=".menus.ClassicResultMenu"
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
         <activity
-            android:name=".Practice"
+            android:name=".menus.PracticeMenu"
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>
         <activity
-            android:name=".StartMenu"
+            android:name=".menus.StartMenu"
             android:exported="true"
             android:theme="@style/Theme.PoulpeJeu">
         </activity>

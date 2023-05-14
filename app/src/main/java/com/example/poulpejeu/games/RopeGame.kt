@@ -1,14 +1,19 @@
-package com.example.poulpejeu
+package com.example.poulpejeu.games
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.core.view.GestureDetectorCompat
+import androidx.core.view.isVisible
+import com.example.poulpejeu.GameHandler
+import com.example.poulpejeu.menus.PracticeResult
+import com.example.poulpejeu.R
 import kotlin.math.roundToInt
 
 class RopeGame : ComponentActivity(), GestureDetector.OnGestureListener {
@@ -20,6 +25,8 @@ class RopeGame : ComponentActivity(), GestureDetector.OnGestureListener {
     private lateinit var distanceText: TextView
     private lateinit var corde: ImageView
     private lateinit var timeLeft: TextView
+    private lateinit var count: TextView
+    var gameStarted : Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,34 +36,52 @@ class RopeGame : ComponentActivity(), GestureDetector.OnGestureListener {
         val title: ImageView = findViewById(R.id.ropegame)
         title.setImageResource(R.drawable.ropegame)
 
+        count= findViewById(R.id.count)
+
         dpi = resources.displayMetrics.densityDpi
 
         distanceText = findViewById<TextView>(R.id.distance)
-        distanceText.text = "Distance parcourue : "+ ((totalDistance * 10.0).roundToInt()/10.0).toString() +" cm"
+        distanceText.text = "Distance : "+ ((totalDistance * 10.0).roundToInt()/10.0).toString() +" cm"
 
         gestureDetector = GestureDetectorCompat(this, this)
         gestureDetector.setIsLongpressEnabled(false)
         timeLeft = findViewById(R.id.chrono)
 
+        timeLeft.isVisible = false
+        distanceText.isVisible = false
+
         corde = findViewById<ImageView>(R.id.cordeview)
 
-        object : CountDownTimer(20000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                // Mise à jour de l'affichage du temps restant
-                val secondsLeft = millisUntilFinished / 1000
-                // Par exemple, vous pouvez mettre à jour un TextView avec le temps restant :
-                timeLeft.text = "$secondsLeft"
-            }
+        startCountdown(3)
 
-            override fun onFinish() {
-                // La minuterie est terminée, vous pouvez appeler votre fonction end ici
-                //end()
-                showScore()
+    }
 
-            }
-        }.start()
+    fun startCountdown(seconds: Int) {
+        count.text = seconds.toString()
+        if (seconds > 0) {
+            Handler().postDelayed({ startCountdown(seconds - 1) }, 1000)
+        } else {
+            gameStarted = true
+            count.isVisible = false
+            timeLeft.isVisible = true
+            distanceText.isVisible = true
 
+            object : CountDownTimer(20000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    // Mise à jour de l'affichage du temps restant
+                    val secondsLeft = millisUntilFinished / 1000
+                    // Par exemple, vous pouvez mettre à jour un TextView avec le temps restant :
+                    timeLeft.text = "$secondsLeft"
+                }
 
+                override fun onFinish() {
+                    // La minuterie est terminée, vous pouvez appeler votre fonction end ici
+                    //end()
+                    showScore()
+
+                }
+            }.start()
+        }
     }
 
 
@@ -90,16 +115,19 @@ class RopeGame : ComponentActivity(), GestureDetector.OnGestureListener {
         distanceX: Float,
         distanceY: Float
     ): Boolean {
-        val deltaY = event2.y - previousY
+        if(gameStarted) {
+            val deltaY = event2.y - previousY
 
-        previousY = event2.y.toDouble()
+            previousY = event2.y.toDouble()
 
-        if (deltaY > 0) {
-            totalDistance += deltaY / (dpi / 2.54)
-            distanceText.text = "Distance parcourue : "+ ((totalDistance * 10.0).roundToInt()/10.0).toString() + " cm"
-            corde.translationY += deltaY.toFloat();
-            if(corde.translationY > 0){
-                corde.translationY = -1500f;
+            if (deltaY > 0) {
+                totalDistance += deltaY / (dpi / 2.54)
+                distanceText.text =
+                    "Distance : " + ((totalDistance * 10.0).roundToInt() / 10.0).toString() + " cm"
+                corde.translationY += deltaY.toFloat();
+                if (corde.translationY > 0) {
+                    corde.translationY = -1500f;
+                }
             }
         }
 

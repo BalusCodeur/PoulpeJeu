@@ -1,17 +1,13 @@
-package com.example.poulpejeu
+package com.example.poulpejeu.games
 
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.view.ViewGroup
-import android.widget.Button
 import androidx.activity.ComponentActivity
-import android.widget.LinearLayout
 import android.widget.TextView
+import com.example.poulpejeu.GameHandler
+import com.example.poulpejeu.menus.PracticeResult
+import com.example.poulpejeu.R
 import kotlin.math.roundToInt
 
 

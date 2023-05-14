@@ -15,9 +15,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.example.poulpejeu.GameHandler
-import com.example.poulpejeu.MainActivity
 import com.example.poulpejeu.R
-import com.example.poulpejeu.StartMenu
+import com.example.poulpejeu.menus.StartMenu
 
 /**
  * A fragment that manages a particular peer and allows interaction with device

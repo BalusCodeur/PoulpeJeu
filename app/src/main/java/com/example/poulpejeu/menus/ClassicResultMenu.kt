@@ -1,24 +1,27 @@
-package com.example.poulpejeu
+package com.example.poulpejeu.menus
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.core.view.isVisible
+import com.example.poulpejeu.GameHandler
+import com.example.poulpejeu.MainActivity
 import com.example.poulpejeu.P2P.MessageDataHolder
 import com.example.poulpejeu.P2P.MessageTransferService
 import com.example.poulpejeu.P2P.Server
+import com.example.poulpejeu.R
 
-class PlayResult : ComponentActivity(), Server.ServerCallback, MessageTransferService.ServerResponseCallback {
+class ClassicResultMenu : ComponentActivity(), Server.ServerCallback, MessageTransferService.ServerResponseCallback {
     private lateinit var returnMenuButton:Button
     private lateinit var score1:TextView
     private lateinit var score2:TextView
     private lateinit var score3:TextView
     private lateinit var waiting:TextView
     private lateinit var winner:ImageView
+    private lateinit var title: ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +33,9 @@ class PlayResult : ComponentActivity(), Server.ServerCallback, MessageTransferSe
         score3 = findViewById(R.id.score3)
         waiting = findViewById(R.id.waiting)
         winner = findViewById(R.id.winner)
+        title = findViewById(R.id.score_title)
+
+        title.setImageResource(R.drawable.score)
 
         if(GameHandler.isOwner!!) {
             GameHandler.server!!.setServerCallback(this)
