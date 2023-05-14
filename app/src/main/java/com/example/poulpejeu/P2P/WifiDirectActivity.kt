@@ -111,6 +111,7 @@ class WifiDirectActivity : AppCompatActivity(), ChannelListener,
             // After this point you wait for callback in
             // onRequestPermissionsResult(int, String[], int[]) overridden method
         }
+        disconnect()
     }
 
     /** register the BroadcastReceiver with the intent values to be matched  */

@@ -61,23 +61,18 @@ class RopeGame : ComponentActivity(), GestureDetector.OnGestureListener {
 
 
     fun showScore() {
-        val score = ((totalDistance * 10.0).roundToInt()/10.0).toString() + " cm"
+        val score = "Corde déroulée : " + ((totalDistance * 10.0).roundToInt()/10.0).toString() + " cm"
         val bundle = intent.extras
-        if(intent.getIntExtra("mode",0)==0) {
+        if(GameHandler.practiceMode) {
             val intent = Intent(this, PracticeResult::class.java)
             intent.putExtra("score", score)
             startActivity(intent)
             finish()
         }else {
-            val intent = Intent(this,PlayResult::class.java)
-            intent.putExtra("score", score)
-            if (bundle != null) {
-                intent.putExtras(bundle)
-            }
-            startActivity(intent)
+            GameHandler.scoreText[GameHandler.currentGame] = score
+            GameHandler.nextGame(this, totalDistance.toFloat())
             finish()
         }
-        //end = true
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {

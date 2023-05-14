@@ -112,10 +112,9 @@ class Quizz : ComponentActivity() {
 
     fun showScore() {
         // Show score in a toast message
-        val scorestr = "$score/${questions.size}"
+        val scorestr = "Réponses : $score/${questions.size}"
 
-
-        if (intent.getIntExtra("mode", 0) == 0) {
+        if (GameHandler.practiceMode) {
             val intent = Intent(this, PracticeResult::class.java)
             intent.putExtra("score", scorestr)
             intent.putExtra("game","Quiz")
@@ -128,13 +127,8 @@ class Quizz : ComponentActivity() {
             editor.apply()
             startActivity(intent)
         } else {
-            val bundle = intent.extras
-            val intent = Intent(this, PlayResult::class.java)
-            if (bundle != null) {
-                bundle.putString("score", scorestr)
-                intent.putExtras(bundle)
-            }
-            startActivity(intent)
+            GameHandler.scoreText[GameHandler.currentGame] = scorestr
+            GameHandler.nextGame(this, score.toFloat())
         }
         finish()
     }

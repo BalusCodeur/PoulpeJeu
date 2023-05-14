@@ -53,11 +53,20 @@ class ShoutGame : ComponentActivity(){
             return 20 * kotlin.math.log10(mRecorder.maxAmplitude.toDouble())
         }
 
-        fun endGame(){
-            progressBar.isVisible = false
-            count.isVisible = false
-            result.text = "Volume atteint : " + ((volume * 100.0).roundToInt()/100.0).toString() + " dB"
-            result.isVisible = true
+
+        fun showScore() {
+            val score = "Volume atteint : " + ((volume * 100.0).roundToInt()/100.0).toString() + " dB"
+            val bundle = intent.extras
+            if(GameHandler.practiceMode) {
+                val intent = Intent(this, PracticeResult::class.java)
+                intent.putExtra("score", score)
+                startActivity(intent)
+                finish()
+            }else {
+                GameHandler.scoreText[GameHandler.currentGame] = score
+                GameHandler.nextGame(this, volume.toFloat())
+                finish()
+            }
         }
 
         fun startGame() {
@@ -81,8 +90,9 @@ class ShoutGame : ComponentActivity(){
                         handler2.postDelayed(this, 30)
                     }
                     else {
-                        endGame()
                         mRecorder.stop()
+                        showScore()
+
                     }
                 }
             })

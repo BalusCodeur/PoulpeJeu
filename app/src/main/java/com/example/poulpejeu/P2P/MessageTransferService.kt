@@ -3,6 +3,8 @@ package com.example.poulpejeu.P2P
 import android.app.IntentService
 import android.content.*
 import android.util.Log
+import com.example.poulpejeu.GameHandler
+import com.google.gson.Gson
 import java.io.*
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -22,7 +24,7 @@ class MessageTransferService : IntentService {
 
         if ((intent!!.action == ACTION_SEND_STRING)) {
 
-            val messageToSend: String? = intent.extras!!.getString(EXTRAS_STRING)
+            var messageToSend: String? = intent.extras!!.getString(EXTRAS_STRING)
             val host: String? = intent.extras!!.getString(EXTRAS_GROUP_OWNER_ADDRESS)
             val port: Int = intent.extras!!.getInt(EXTRAS_GROUP_OWNER_PORT)
 
@@ -37,13 +39,20 @@ class MessageTransferService : IntentService {
 
                 Log.d(TAG, "Client socket - " + socket.isConnected)
 
-                outputStream.write(messageToSend)
+                if(messageToSend == "scores"){
+                    messageToSend = Gson().toJson(Message("scores", GameHandler.scores[0],GameHandler.scores[1],GameHandler.scores[2]))
+                }
+
+                outputStream.write(messageToSend + "\r\n")
                 outputStream.flush()
-                Log.d(TAG, "Client: Message sent")
+                Log.d(TAG, "Client: Message sent, waiting for response")
 
 
-                val response = inputStream.readLine()
-                MessageDataHolder.serverResponseCallback?.onServerResponseReceived(response)
+                var response = inputStream.readLine()
+                response.replace("\r\n","")
+                Log.d(TAG, "Client: Response received : $response")
+                messageHandler(response, outputStream)
+
 
             } catch (e: IOException) {
                 Log.e(TAG, (e.message)!!)
@@ -51,7 +60,7 @@ class MessageTransferService : IntentService {
                 if (socket.isConnected) {
                     try {
                         socket.close()
-                        Log.d(TAG, "Closing client socket ")
+                        Log.d(TAG, "Client : closing socket ")
                     } catch (e: IOException) {
                         // Give up
                         e.printStackTrace()
@@ -59,6 +68,30 @@ class MessageTransferService : IntentService {
                 }
             }
         }
+    }
+
+    private fun messageHandler(msg: String, outputStream: OutputStreamWriter){
+        var inData: Message? = null
+
+            try {
+                inData = Gson().fromJson(msg, Message::class.java)
+            }catch(e:Exception){
+                e.printStackTrace()
+            }
+            if(inData != null){
+                if (inData.messageType == "games") {
+                    GameHandler.games[0] = inData.param1.toInt()
+                    GameHandler.games[1] = inData.param2.toInt()
+                    GameHandler.games[2] = inData.param3.toInt()
+
+                    MessageDataHolder.serverResponseCallback?.onServerResponseReceived("start")
+                }
+                else if (inData.messageType == "winner") {
+                    GameHandler.winner = inData.param1.toInt()
+                    GameHandler.otherFinished = true
+                    MessageDataHolder.serverResponseCallback?.onServerResponseReceived("finish")
+                }
+            }
     }
 
     interface ServerResponseCallback {

@@ -178,19 +178,15 @@ class Soleil123 : ComponentActivity() {
         }
 
     fun showScore() {
-        val score = ((System.currentTimeMillis() - start) / 1000.0).toString() + " secondes"
+        val score = ((System.currentTimeMillis() - start) / 1000.0)
         val bundle = intent.extras
-        if(intent.getIntExtra("mode",0)==0) {
+        if(GameHandler.practiceMode) {
             val intent = Intent(this, PracticeResult::class.java)
-            intent.putExtra("score", score)
+            intent.putExtra("score", "$score secondes")
             startActivity(intent)
         }else {
-            val intent = Intent(this,PlayResult::class.java)
-            intent.putExtra("score", score)
-            if (bundle != null) {
-                intent.putExtras(bundle)
-            }
-            startActivity(intent)
+            GameHandler.scoreText[GameHandler.currentGame] = "Ligne atteinte en $score secondes"
+            GameHandler.nextGame(this, score.toFloat())
         }
         end = true
     }

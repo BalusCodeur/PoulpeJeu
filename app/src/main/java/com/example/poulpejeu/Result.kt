@@ -12,7 +12,7 @@ class Result : ComponentActivity() {
         setContentView(R.layout.result_layout)
         score = findViewById(R.id.score)
         // Récupérer le score depuis l'intent
-        val scoreActivity = intent.getStringExtra("score")
+        val scoreActivity = intent.getStringExtra("test")
         // Afficher le score dans le TextView
         score.text = scoreActivity
     }

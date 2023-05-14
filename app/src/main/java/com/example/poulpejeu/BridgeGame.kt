@@ -116,19 +116,14 @@ class BridgeGame : ComponentActivity() {
 
     fun showScore() {
         // Show score in a toast message
-        val score = "$lives vies";
-        if(intent.getIntExtra("mode",0)==0) {
+        val score = "Il reste $lives vies";
+        if(GameHandler.practiceMode) {
             val intent = Intent(this, PracticeResult::class.java)
             intent.putExtra("score", score)
             startActivity(intent)
         }else {
-            val bundle = intent.extras
-            val intent = Intent(this,PlayResult::class.java)
-            if (bundle != null) {
-                bundle.putString("score",score)
-                intent.putExtras(bundle)
-            }
-            startActivity(intent)
+            GameHandler.scoreText[GameHandler.currentGame] = score
+            GameHandler.nextGame(this, lives.toFloat())
         }
         finish()
     }

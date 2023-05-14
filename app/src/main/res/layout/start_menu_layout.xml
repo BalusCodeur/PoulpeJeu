@@ -36,6 +36,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/poulpejeu"/>
 
+        <TextView
+            android:id="@+id/waiting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="En attente du lancement de la partie ..."
+            android:fontFamily="@font/squaredfont"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/poulpejeu"
+            android:padding="20dp"
+            />
+
 
 
         <androidx.constraintlayout.widget.Guideline

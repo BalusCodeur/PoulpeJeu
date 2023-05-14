@@ -24,15 +24,6 @@ class MainActivity : ComponentActivity() {
     private lateinit var buttonPractice: Button
     private lateinit var buttonP2P: Button
 
-    private val activityList = listOf(
-        ShoutGame::class.java,
-        Soleil123::class.java,
-        BridgeGame::class.java,
-        Biscuit::class.java,
-        RopeGame::class.java,
-        Quizz::class.java
-    )
-    private var currentIndex = 0
 
 
     private val RECORD_AUDIO_PERMISSION_REQUEST_CODE = 1
@@ -78,6 +69,7 @@ class MainActivity : ComponentActivity() {
         buttonPractice = findViewById(R.id.practiceButton)
         buttonP2P = findViewById(R.id.P2PButton)
 
+        GameHandler.resetData()
 
 
         title.setImageResource(R.drawable.poulpejeu)

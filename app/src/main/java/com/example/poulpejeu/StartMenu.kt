@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -22,17 +23,7 @@ class StartMenu() : ComponentActivity(), Server.ServerCallback, MessageTransferS
     private lateinit var title: ImageView
     private lateinit var bandeSon: MediaPlayer
     private lateinit var buttonPlay: Button
-
-    private val activityList = listOf(
-        ShoutGame::class.java,
-        Soleil123::class.java,
-        BridgeGame::class.java,
-        Biscuit::class.java,
-        RopeGame::class.java,
-        Quizz::class.java
-    )
-    private var currentIndex = 0
-
+    private lateinit var waiting: TextView
 
 
     private val RECORD_AUDIO_PERMISSION_REQUEST_CODE = 1
@@ -68,6 +59,8 @@ class StartMenu() : ComponentActivity(), Server.ServerCallback, MessageTransferS
         title = findViewById(R.id.poulpejeu)
         bandeSon = MediaPlayer.create(this,R.raw.bandeson)
         buttonPlay = findViewById(R.id.playButton)
+        waiting = findViewById(R.id.waiting)
+        waiting.isVisible = false
 
 
 
@@ -85,6 +78,7 @@ class StartMenu() : ComponentActivity(), Server.ServerCallback, MessageTransferS
         if(GameHandler.isOwner!!) {
             GameHandler.server!!.setServerCallback(this)
             buttonPlay.isVisible = false
+            waiting.isVisible = true
         }else{
             MessageDataHolder.serverResponseCallback = this
         }
@@ -92,7 +86,7 @@ class StartMenu() : ComponentActivity(), Server.ServerCallback, MessageTransferS
         buttonPlay.setOnClickListener {
 
             serviceIntent.action= MessageTransferService.ACTION_SEND_STRING
-            serviceIntent.putExtra(MessageTransferService.EXTRAS_STRING, "start\r\n")
+            serviceIntent.putExtra(MessageTransferService.EXTRAS_STRING, "start")
             serviceIntent.putExtra(
                 MessageTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
                 GameHandler.infoConnection!!.groupOwnerAddress.hostAddress
@@ -100,21 +94,7 @@ class StartMenu() : ComponentActivity(), Server.ServerCallback, MessageTransferS
             serviceIntent.putExtra(MessageTransferService.Companion.EXTRAS_GROUP_OWNER_PORT, 8988)
             this.startService(serviceIntent)
 
-
-
-            // Créez une Intent pour ouvrir votre nouvelle page
-            //val randomActivities = activityList.shuffled().take(3)
-            val randomActivities = listOf(Quizz::class.java,Biscuit::class.java,BridgeGame::class.java)
-            val bundle = Bundle()
-            bundle.putSerializable("randomActivities", ArrayList(randomActivities))
-            bundle.putInt("currentIndex", 0)
-            val intent = Intent(this, randomActivities[0])
-            intent.putExtra("mode",1)
-            Log.i("bundle",bundle.toString())
-            intent.putExtras(bundle)
-            startActivity(intent)
         }
-
 
         requestRecordAudioPermission()
     }
@@ -131,12 +111,20 @@ class StartMenu() : ComponentActivity(), Server.ServerCallback, MessageTransferS
 
     override fun onServerRequestReceived(request: String) {
         runOnUiThread {
+            if(request == "start"){
+                val intent = Intent(this, GameHandler.activityMap[GameHandler.games[0]])
+                startActivity(intent)
+            }
 
         }
     }
 
     override fun onServerResponseReceived(response: String) {
         runOnUiThread {
+            if(response == "start"){
+                val intent = Intent(this, GameHandler.activityMap[GameHandler.games[0]])
+                startActivity(intent)
+            }
 
         }
     }

@@ -128,18 +128,13 @@ class Biscuit: ComponentActivity() {
     fun showScore(){
         end = true
         val score = (timeElapsed/1000).toString()+","+ (timeElapsed%1000) + "s"
-        if(intent.getIntExtra("mode",0)==0) {
+        if(GameHandler.practiceMode) {
             val intent = Intent(this, PracticeResult::class.java)
             intent.putExtra("score", score)
             startActivity(intent)
         }else {
-            val bundle = intent.extras
-            val intent = Intent(this,PlayResult::class.java)
-            if (bundle != null) {
-                bundle.putString("score",score)
-                intent.putExtras(bundle)
-            }
-            startActivity(intent)
+            GameHandler.scoreText[GameHandler.currentGame] = score
+            GameHandler.nextGame(this, timeElapsed.toFloat())
         }
         finish()
     }
