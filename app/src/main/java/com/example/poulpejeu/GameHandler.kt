@@ -125,7 +125,7 @@ init {
         while (numbers.size < 3) {
             val randomNumber = random.nextInt(6)
 
-            if (!numbers.contains(randomNumber) && randomNumber != SOLEIL) {
+            if (!numbers.contains(randomNumber) && randomNumber != SHOUT) {
                 numbers.add(randomNumber)
             }
         }

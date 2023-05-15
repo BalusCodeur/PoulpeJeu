@@ -26,6 +26,7 @@ class BiscuitGame: ComponentActivity() {
     private lateinit var squareView: SquareView
     private lateinit var count: TextView
     private lateinit var biscuit : ImageView
+    private lateinit var biscuitgame : ImageView
     private lateinit var chrono: TextView
     private lateinit var container: FrameLayout
 
@@ -63,6 +64,9 @@ class BiscuitGame: ComponentActivity() {
 
         biscuit = findViewById(R.id.biscuit)
         biscuit.setImageResource(R.drawable.biscuit)
+
+        biscuitgame = findViewById(R.id.biscuitgame)
+        biscuitgame.setImageResource(R.drawable.biscuitgame)
 
         count = findViewById(R.id.count)
         chrono = findViewById(R.id.chrono)

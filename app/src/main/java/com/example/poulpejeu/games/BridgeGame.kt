@@ -3,6 +3,7 @@ package com.example.poulpejeu.games
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import android.widget.TextView
 import com.example.poulpejeu.GameHandler
@@ -15,7 +16,7 @@ class BridgeGame : ComponentActivity() {
     private var currentRow = 8
     private var lives = 9
     private lateinit var data: Array<BooleanArray>
-    private lateinit var myTextView: TextView
+    private lateinit var bridgetitle: ImageView
     private lateinit var buttons: Array<Array<GlassButton>>
 
 
@@ -23,8 +24,9 @@ class BridgeGame : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.bridgegame_layout)
 
-        myTextView = findViewById(R.id.dead)
-        myTextView.setText("Lives : " + lives)
+        bridgetitle = findViewById(R.id.bridgegame)
+        bridgetitle.setImageResource(R.drawable.bridgegame)
+
 
 
         var tab = IntArray(9)
@@ -92,7 +94,6 @@ class BridgeGame : ComponentActivity() {
 
             } else {
                 lives--;
-                myTextView.setText("Lives : " + lives)
                 reInit()
             }
         }
