@@ -52,8 +52,16 @@ class ShoutGame : ComponentActivity(){
             val score = "Volume atteint : " + ((volume * 100.0).roundToInt()/100.0).toString() + " dB"
             val bundle = intent.extras
             if(GameHandler.practiceMode) {
+
                 val intent = Intent(this, PracticeResult::class.java)
                 intent.putExtra("score", score)
+                intent.putExtra("game","Shout")
+                val prefs = getSharedPreferences("scores", MODE_PRIVATE)
+                val editor = prefs.edit()
+
+                // Enregistrer le score dans les SharedPreferences sous forme de chaîne
+                editor.putLong("lastscorelong", volume.toLong())
+                editor.apply()
                 startActivity(intent)
                 finish()
             }else {

@@ -27,7 +27,8 @@ class SoleilGame : ComponentActivity() {
     private lateinit var fille: ImageView
     private lateinit var runner: ImageView
     private lateinit var tdm: ImageView
-    private lateinit var run : Button
+    private lateinit var feu1:ImageView
+    private lateinit var feu2:ImageView
     private lateinit var score : TextView
     private lateinit var count : TextView
     val translationAnim = TranslateAnimation(0f, 0f, 0f, -40f) // déplace de 200 pixels vers le haut
@@ -39,6 +40,8 @@ class SoleilGame : ComponentActivity() {
     private var start:Long = 0
     var startgame = false
     var end = false
+    var dead = false
+    var malus = 0;
 
     private lateinit var sonTourne : MediaPlayer
     private lateinit var sonCompte : MediaPlayer
@@ -61,7 +64,13 @@ class SoleilGame : ComponentActivity() {
         runner = findViewById(R.id.runner)
         runner.setImageResource(R.drawable.runner)
 
-        run = findViewById(R.id.Run)
+        feu1 = findViewById(R.id.light1)
+        feu2 = findViewById(R.id.light2)
+
+        feu1.setImageResource(R.drawable.redlight)
+        feu2.setImageResource(R.drawable.redlight)
+
+
 
 
         sonCompte = MediaPlayer.create(this, R.raw.soleil123)
@@ -70,16 +79,13 @@ class SoleilGame : ComponentActivity() {
 
         translationAnim.duration = 10 // durée de l'animation en ms
 
+        count.isVisible = true
+        startCountdown(3)
 
         translationAnim.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {
                 if (isCounting) {
-                    sonCompte.stop()
-                    sonTourne.stop()
-                    setContentView(R.layout.soleil_dead_layout)
-                    tdm = findViewById(R.id.tdm)
-                    tdm.setImageResource(R.drawable.tdm)
-                    end= true
+                    malus++;
                 }
                 // Rien à faire ici
             }
@@ -94,12 +100,6 @@ class SoleilGame : ComponentActivity() {
 
             }
         })
-
-        run.setOnClickListener {
-            run.isVisible=false
-            count.isVisible = true
-            startCountdown(3)
-        }
     }
     val sensorEventListener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent) {
@@ -131,7 +131,6 @@ class SoleilGame : ComponentActivity() {
     }
 
     private fun startNextCounting() {
-
             if (currentCountIndex >= countingPattern.size) {
                 // Si on a atteint la fin du tableau, le joueur a perdu
                 Log.i("Fin", "Fin du jeu")
@@ -147,7 +146,10 @@ class SoleilGame : ComponentActivity() {
 
             // Démarre le CountDownTimer pour le comptage
         if(!end){
+            feu1.setImageResource(R.drawable.greenlight)
+            feu2.setImageResource(R.drawable.greenlight)
             object : CountDownTimer(countDuration, counterInterval) {
+
                 override fun onTick(millisUntilFinished: Long) {
                     counter = millisUntilFinished / 1000L
                     if (counter == 5L) {
@@ -157,6 +159,8 @@ class SoleilGame : ComponentActivity() {
                 }
 
                 override fun onFinish() {
+                    feu1.setImageResource(R.drawable.redlight)
+                    feu2.setImageResource(R.drawable.redlight)
                     if(!end) {
                         isCounting = !isCounting
                         // Démarre le CountDownTimer pour la pause
@@ -181,12 +185,19 @@ class SoleilGame : ComponentActivity() {
         }
 
     fun showScore() {
-        val score = ((System.currentTimeMillis() - start) / 1000.0)
+        val score = ((System.currentTimeMillis() - start) / 1000.0)+(malus*5)
         val bundle = intent.extras
         if(GameHandler.practiceMode) {
             val intent = Intent(this, PracticeResult::class.java)
+            intent.putExtra("game","Soleil")
+            val prefs = getSharedPreferences("scores", MODE_PRIVATE)
+            val editor = prefs.edit()
+            // Enregistrer le score dans les SharedPreferences sous forme de chaîne
+            editor.putLong("lastscorelong", score.toLong())
+            editor.apply()
             intent.putExtra("score", "$score secondes")
             startActivity(intent)
+            finish()
         }else {
             GameHandler.scoreText[GameHandler.currentGame] = "Ligne atteinte en $score secondes"
             GameHandler.nextGame(this, score.toFloat())

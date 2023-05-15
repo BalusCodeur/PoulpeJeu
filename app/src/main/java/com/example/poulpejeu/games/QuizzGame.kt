@@ -125,7 +125,7 @@ class QuizzGame : ComponentActivity() {
             val editor = prefs.edit()
 
             // Enregistrer le score dans les SharedPreferences sous forme de chaîne
-            editor.putInt("lastscore", score)
+            editor.putInt("lastscoreint", score)
             //editor.putString("scoreQuiz","1,4,2,3,5")
             editor.apply()
             startActivity(intent)

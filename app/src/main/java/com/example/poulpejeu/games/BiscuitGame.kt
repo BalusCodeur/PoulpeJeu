@@ -130,10 +130,21 @@ class BiscuitGame: ComponentActivity() {
 
     fun showScore(){
         end = true
+        val scorestr = timeElapsed;
+        Log.i("scorestr",scorestr.toString())
         val score = (timeElapsed/1000).toString()+","+ (timeElapsed%1000) + "s"
         if(GameHandler.practiceMode) {
             val intent = Intent(this, PracticeResult::class.java)
             intent.putExtra("score", score)
+            startActivity(intent)
+            intent.putExtra("score", score)
+            intent.putExtra("game","Biscuit")
+            val prefs = getSharedPreferences("scores", MODE_PRIVATE)
+            val editor = prefs.edit()
+
+            // Enregistrer le score dans les SharedPreferences sous forme de chaîne
+            editor.putLong("lastscorelong", scorestr)
+            editor.apply()
             startActivity(intent)
         }else {
             GameHandler.scoreText[GameHandler.currentGame] = score
