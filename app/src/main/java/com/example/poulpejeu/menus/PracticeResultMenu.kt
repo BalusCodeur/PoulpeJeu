@@ -55,11 +55,6 @@ class PracticeResult : ComponentActivity() {
             adapterlong = ScoreAdapterLong(this,R.layout.score_listview,scores,lastGame)
             scoreList.adapter = adapterlong
         }
-
-
-
-
-
         back.setOnClickListener { finish() }
     }
 
@@ -266,6 +261,10 @@ class ScoreAdapterLong(context: Context, resource: Int, scores: MutableList<Pair
             "Rope" -> view.findViewById<TextView>(R.id.textview_score).text = (((score?.second?.times(
                 10.0
             ))?.roundToInt() ?: 0) /10.0).toString() + " cm"
+            "Soleil" -> view.findViewById<TextView>(R.id.textview_score).text = (score?.second).toString()+ "  s"
+            "Shout" ->  view.findViewById<TextView>(R.id.textview_score).text = (((score?.second?.times(
+                100.0
+            ))?.roundToInt() ?: 0) /100.0).toString() + " dB"
 
         }
 

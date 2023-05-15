@@ -41,7 +41,6 @@ class SoleilGame : ComponentActivity() {
     var startgame = false
     var end = false
     var dead = false
-    var malus = 0;
 
     private lateinit var sonTourne : MediaPlayer
     private lateinit var sonCompte : MediaPlayer
@@ -85,7 +84,9 @@ class SoleilGame : ComponentActivity() {
         translationAnim.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {
                 if (isCounting) {
-                    malus++;
+                    dead = true
+                    end = true
+                    showScore()
                 }
                 // Rien à faire ici
             }
@@ -110,12 +111,13 @@ class SoleilGame : ComponentActivity() {
 
             val acceleration = kotlin.math.sqrt(x * x + y * y + z * z)
             //Log.i("Vitesse",acceleration.toString())
-            if (acceleration > 15 && runner.translationY >= -1260 && startgame) { // Choisissez un seuil approprié ici
+            if (acceleration > 15 && runner.translationY >= -1420 && startgame) { // Choisissez un seuil approprié ici
                 runner.startAnimation(translationAnim)
                 Log.i("Position",runner.translationY.toString())
                 //val anim = AnimationUtils.loadAnimation(this, R.anim.running_anim)
                 //imageViewRunner.startAnimation(anim)
-            }else if(runner.translationY <= -1260 && !end){
+            }else if(runner.translationY <= -1420 && !end){
+                end = true
                 showScore()
             }
 
@@ -133,11 +135,9 @@ class SoleilGame : ComponentActivity() {
     private fun startNextCounting() {
             if (currentCountIndex >= countingPattern.size) {
                 // Si on a atteint la fin du tableau, le joueur a perdu
-                Log.i("Fin", "Fin du jeu")
-                setContentView(R.layout.soleil_dead_layout)
-                tdm = findViewById(R.id.tdm)
-                tdm.setImageResource(R.drawable.tdm)
+                dead=true
                 end = true
+                showScore()
                 return
             }
 
@@ -185,7 +185,10 @@ class SoleilGame : ComponentActivity() {
         }
 
     fun showScore() {
-        val score = ((System.currentTimeMillis() - start) / 1000.0)+(malus*5)
+        var score = ((System.currentTimeMillis() - start) / 1000.0)
+        if(dead){
+            score = 1000.0;
+        }
         val bundle = intent.extras
         if(GameHandler.practiceMode) {
             val intent = Intent(this, PracticeResult::class.java)

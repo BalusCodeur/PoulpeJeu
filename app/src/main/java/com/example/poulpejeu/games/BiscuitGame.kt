@@ -172,13 +172,6 @@ class CircleView(context: Context) : View(context) {
         centerX = width / 2f
         centerY = height / 2f
 
-        /*paintblack.color = Color.BLACK // Couleur rouge définie dans les ressources
-        paintblack.style = Paint.Style.STROKE // Cercle non rempli
-        paintblack.strokeWidth = 5f
-
-        paintred.color = Color.RED
-        paintred.style= Paint.Style.STROKE
-        paintred.strokeWidth = 15f*/
         canvas.drawCircle(centerX, centerY, smallRadius, biscuitActivity.transparent)
         canvas.drawCircle(centerX, centerY, mediumRadius, biscuitActivity.paint)
         canvas.drawCircle(centerX, centerY, bigRadius, biscuitActivity.transparent)
@@ -209,18 +202,14 @@ class CircleView(context: Context) : View(context) {
                         );
                     }
                     // Le doigt touche l'écran, on initialise les coordonnées de départ
-                    if (distancetrace < 50f) {
+                    if (distancetrace < 70f) {
                         if (distance <= smallRadius) {
                             // L'utilisateur touche l'intérieur du petit cercle
                             biscuitActivity.penalty()
-
-                            Log.i("caca", "Mort")
                         } else if (distance <= bigRadius) {
                             // L'utilisateur touche l'intérieur du grand cercle
-                            Log.i("big", "big")
                             points.add(PointF(event.x, event.y))
                         } else {
-                            Log.i("Menfou", "Menfou")
                         }
                         trace = true
                     } else {
@@ -228,7 +217,6 @@ class CircleView(context: Context) : View(context) {
                         if (distance <= smallRadius) {
                             // L'utilisateur touche l'intérieur du petit cercle
                             biscuitActivity.penalty()
-                            Log.i("caca", "Mort")
                         }
                     }
                     return true
@@ -248,7 +236,6 @@ class CircleView(context: Context) : View(context) {
                     if (trace) {
                         if (distance <= smallRadius) {
                             // L'utilisateur touche l'intérieur du petit cercle
-                            Log.i("caca", "Mort")
                             biscuitActivity.penalty()
                             trace = false
                         } else if (distance <= bigRadius) {
@@ -280,8 +267,6 @@ class CircleView(context: Context) : View(context) {
             distance += sqrt((p2.x - p1.x).pow(2) + (p2.y - p1.y).pow(2))
         }
         val circumference = 2 * PI * radius
-        //Log.i("cercle",(circumference - distance).toString())
-        //Log.i("", sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2)).toString())
         return circumference - distance  < 0f && sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2))<30f
     }
 
@@ -311,17 +296,6 @@ class SquareView(context: Context?) : View(context) {
     var distancetrace = 0f
     var trace = false
 
-    /*private val mediumSquarePaint = Paint().apply {
-        color = Color.BLACK
-        style = Paint.Style.STROKE
-        strokeWidth = 5f
-    }
-
-    private val paintred = Paint().apply {
-        color = Color.RED
-        style = Paint.Style.STROKE
-        strokeWidth = 5f
-    }*/
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -385,16 +359,13 @@ class SquareView(context: Context?) : View(context) {
                         );
                     }
                     // Le doigt touche l'écran, on initialise les coordonnées de départ
-                    if (distancetrace < 50f) {
+                    if (distancetrace < 70f) {
                         if (smallSquareRect.contains(x, y)) {
                             // L'utilisateur touche l'intérieur du petit cercle
-                            Log.i("caca", "Mort")
                             biscuitActivity.penalty()
                         } else if (!largeSquareRect.contains(x, y)) {
-                            Log.i("Menfou", "Menfou")
                         } else {
                             // L'utilisateur touche l'intérieur du grand cercle
-                            Log.i("big", "big")
                             points.add(PointF(event.x, event.y))
                         }
                         trace = true
@@ -402,7 +373,6 @@ class SquareView(context: Context?) : View(context) {
                         trace = false
                         if (smallSquareRect.contains(x, y)) {
                             // L'utilisateur touche l'intérieur du petit cercle
-                            Log.i("caca", "Mort")
                             biscuitActivity.penalty()
                         }
                     }
@@ -423,13 +393,11 @@ class SquareView(context: Context?) : View(context) {
                     if (trace) {
                         if (smallSquareRect.contains(x, y)) {
                             // L'utilisateur touche l'intérieur du petit cercle
-                            Log.i("caca", "Mort")
                             biscuitActivity.penalty()
                             trace = false
                         } else if (largeSquareRect.contains(x, y)) {
                             points.add(PointF(x, y))
                             invalidate()
-                            //Log.i("result", isSquare(points).toString())
                         } else {
                             trace = false
                         }
@@ -455,8 +423,6 @@ class SquareView(context: Context?) : View(context) {
             distance += sqrt((p2.x - p1.x).pow(2) + (p2.y - p1.y).pow(2))
         }
         val circumference = 3000f
-        //Log.i("square",(circumference - distance).toString())
-        //Log.i("", sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2)).toString())
         return circumference - distance  < 0f && sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2))<30f
     }
 
@@ -483,11 +449,6 @@ class StarView(context: Context?) : View(context) {
     var distancetrace = 0f
     var trace = false
 
-    /*private val paintred = Paint().apply {
-        color = Color.RED
-        style = Paint.Style.STROKE
-        strokeWidth = 5f
-    }*/
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
@@ -498,16 +459,6 @@ class StarView(context: Context?) : View(context) {
         // Définir les angles pour les branches des étoiles
         val angleOffset = -90f
 
-        // Définir le pinceau pour les étoiles
-        /*val starPaint = Paint().apply {
-            color = Color.BLACK
-            style = Paint.Style.STROKE
-            strokeWidth = 5f
-        }
-        val transparentPaint = Paint().apply{
-            color = Color.TRANSPARENT
-
-        }*/
         // Dessiner les étoiles
         smallPath = drawStar(canvas, centerX, centerY, smallStarSize, angle, innerAngle, angleOffset, biscuitActivity.transparent)
         mediumPath = drawStar(canvas, centerX, centerY, mediumStarSize, angle, innerAngle, angleOffset, biscuitActivity.paint)
@@ -566,13 +517,10 @@ class StarView(context: Context?) : View(context) {
                     if (distancetrace < 50f) {
                         if (isInSmallStar) {
                             // L'utilisateur touche l'intérieur du petit cercle
-                            Log.i("caca", "Mort")
                             biscuitActivity.penalty()
                         } else if (!isInBigStar) {
-                            Log.i("Menfou", "Menfou")
                         } else {
                             // L'utilisateur touche l'intérieur du grand cercle
-                            Log.i("big", "big")
                             points.add(PointF(event.x, event.y))
                         }
                         trace = true
@@ -580,7 +528,6 @@ class StarView(context: Context?) : View(context) {
                         trace = false
                         if (isInSmallStar) {
                             // L'utilisateur touche l'intérieur du petit cercle
-                            Log.i("caca", "Mort")
                             biscuitActivity.penalty()
                         }
                     }
@@ -598,13 +545,11 @@ class StarView(context: Context?) : View(context) {
                     if (trace) {
                         if (isInSmallStar) {
                             // L'utilisateur touche l'intérieur du petit cercle
-                            Log.i("caca", "Mort")
                             biscuitActivity.penalty()
                             trace = false
                         } else if (isInBigStar) {
                             points.add(PointF(x, y))
                             invalidate()
-                            Log.i("result", isStar(points).toString())
                         } else {
                             trace = false
                         }
@@ -643,8 +588,6 @@ class StarView(context: Context?) : View(context) {
             distance += sqrt((p2.x - p1.x).pow(2) + (p2.y - p1.y).pow(2))
         }
         val circumference = 2000f
-        Log.i("star",(circumference - distance).toString())
-        Log.i("", sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2)).toString())
         return circumference - distance  < 0f && sqrt((lastPoint.x - firstPoint.x).pow(2) + (lastPoint.y - firstPoint.y).pow(2))<30f
     }
 
