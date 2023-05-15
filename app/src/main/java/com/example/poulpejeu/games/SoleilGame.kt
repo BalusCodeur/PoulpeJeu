@@ -102,6 +102,12 @@ class SoleilGame : ComponentActivity() {
             }
         })
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish() // Arrêter l'activité
+    }
+
     val sensorEventListener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent) {
             // Traitement des événements d'accéléromètre ici
@@ -113,9 +119,6 @@ class SoleilGame : ComponentActivity() {
             //Log.i("Vitesse",acceleration.toString())
             if (acceleration > 15 && runner.translationY >= -1420 && startgame) { // Choisissez un seuil approprié ici
                 runner.startAnimation(translationAnim)
-                Log.i("Position",runner.translationY.toString())
-                //val anim = AnimationUtils.loadAnimation(this, R.anim.running_anim)
-                //imageViewRunner.startAnimation(anim)
             }else if(runner.translationY <= -1420 && !end){
                 end = true
                 showScore()
@@ -155,7 +158,6 @@ class SoleilGame : ComponentActivity() {
                     if (counter == 5L) {
                         sonCompte.start()
                     }
-                    Log.i("Temps", counter.toString())
                 }
 
                 override fun onFinish() {
@@ -189,7 +191,6 @@ class SoleilGame : ComponentActivity() {
         if(dead){
             score = 1000.0;
         }
-        val bundle = intent.extras
         if(GameHandler.practiceMode) {
             val intent = Intent(this, PracticeResult::class.java)
             intent.putExtra("game","Soleil")

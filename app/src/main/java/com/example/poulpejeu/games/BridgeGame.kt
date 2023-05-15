@@ -122,7 +122,6 @@ class BridgeGame : ComponentActivity() {
 
             // Enregistrer le score dans les SharedPreferences sous forme de chaîne
             editor.putInt("lastscoreint", lives)
-            //editor.putString("scoreQuiz","1,4,2,3,5")
             editor.apply()
             startActivity(intent)
         }else {

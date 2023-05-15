@@ -19,7 +19,7 @@
         android:shadowDy="2"
         android:shadowRadius="10"
         android:background="@color/purple_500"
-        android:gravity="center_vertical"
+        android:gravity="center_vertical|center_horizontal"
         >
     </TextView>
 

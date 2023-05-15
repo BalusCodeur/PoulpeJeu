@@ -40,25 +40,27 @@ class PracticeResult : ComponentActivity() {
         // Afficher le score dans le TextView
         score.text = scoreActivity
 
+        back.setOnClickListener { finish() }
+
         val sharedPreferences = getSharedPreferences("scores", MODE_PRIVATE)
         val lastScoreint = sharedPreferences.getInt("lastscoreint",0)
         val lastScorelong = sharedPreferences.getLong("lastscorelong",1000)
         val lastGame = intent.getStringExtra("game")
 
         if(lastGame=="Quiz"|| lastGame=="Bridge") {
-            val scores = addScore(lastGame!!, lastScoreint, sharedPreferences, this)
+            val scores = addScoreInt(lastGame!!, lastScoreint, sharedPreferences, this)
             adapterint = ScoreAdapterInt(this, R.layout.score_listview, scores)
             scoreList.adapter = adapterint
         }
         if(lastGame=="Biscuit" || lastGame=="Rope"|| lastGame=="Shout"|| lastGame == "Soleil"){
-            val scores = addScore2(lastGame!!, lastScorelong, sharedPreferences, this)
+            val scores = addScoreLong(lastGame!!, lastScorelong, sharedPreferences, this)
             adapterlong = ScoreAdapterLong(this,R.layout.score_listview,scores,lastGame)
             scoreList.adapter = adapterlong
         }
-        back.setOnClickListener { finish() }
+
     }
 
-    fun addScore(game: String, score: Int, preferences: SharedPreferences,context: Context) : MutableList<Pair<String, Int>> {
+    fun addScoreInt(game: String, score: Int, preferences: SharedPreferences,context: Context) : MutableList<Pair<String, Int>> {
         var scores = preferences.getString(game, null)?.let {
             Log.i(it, "Scores from SharedPreferences:")
             try {
@@ -118,17 +120,15 @@ class PracticeResult : ComponentActivity() {
         return scores
     }
 
-    fun addScore2(game: String, score: Long, preferences: SharedPreferences,context: Context) : MutableList<Pair<String, Long>> {
+    fun addScoreLong(game: String, score: Long, preferences: SharedPreferences,context: Context) : MutableList<Pair<String, Long>> {
         var scores = preferences.getString(game, null)?.let {
             Log.i(it, "Scores from SharedPreferences:")
             try {
                 Gson().fromJson<List<Pair<String, Long>>>(it, object : TypeToken<List<Pair<String, Long>>>() {}.type).toMutableList()
             } catch (e: Exception) {
-                Log.i("Boobybooby","")
                 null
             }
         } ?: mutableListOf<Pair<String, Long>>()
-        Log.i(scores.toString(),"1")
 
         for (i in 0 until scores.size ){
             scores[i] = Pair(scores[i].first, scores[i].second.toLong())
@@ -154,9 +154,7 @@ class PracticeResult : ComponentActivity() {
                 val playerName = input.text.toString()
 
                 // Ajouter le nouveau score avec le pseudo saisi
-                Log.i("zizi", scores.toString())
                 scores.add(Pair(playerName, score))
-                Log.i("pipi", scores.toString())
 
                 scores.sortBy { it.second }
                 if (scores.size > 5) {
@@ -165,7 +163,6 @@ class PracticeResult : ComponentActivity() {
 
                 // Enregistrer les scores mis à jour dans les SharedPreferences
                 val json = Gson().toJson(scores)
-                Log.i("json", json.toString())
                 preferences.edit().putString(game, json).apply()
 
                 adapterlong?.notifyDataSetChanged()
@@ -179,7 +176,6 @@ class PracticeResult : ComponentActivity() {
         } else {
             // Enregistrer les scores dans les SharedPreferences sans demander le pseudo du joueur
             val json = Gson().toJson(scores)
-            Log.i("json",json.toString())
             preferences.edit().putString(game, json).apply()
         }
         } else {
@@ -202,9 +198,7 @@ class PracticeResult : ComponentActivity() {
                     val playerName = input.text.toString()
 
                     // Ajouter le nouveau score avec le pseudo saisi
-                    Log.i("zizi", scores.toString())
                     scores.add(Pair(playerName, score))
-                    Log.i("pipi", scores.toString())
 
                     scores.sortByDescending { it.second }
                     if (scores.size > 5) {
@@ -213,7 +207,6 @@ class PracticeResult : ComponentActivity() {
 
                     // Enregistrer les scores mis à jour dans les SharedPreferences
                     val json = Gson().toJson(scores)
-                    Log.i("json", json.toString())
                     preferences.edit().putString(game, json).apply()
 
                     adapterlong?.notifyDataSetChanged()
@@ -227,15 +220,11 @@ class PracticeResult : ComponentActivity() {
             } else {
                 // Enregistrer les scores dans les SharedPreferences sans demander le pseudo du joueur
                 val json = Gson().toJson(scores)
-                Log.i("json",json.toString())
                 preferences.edit().putString(game, json).apply()
             }
         }
-        Log.i(scores.toString(),"hahaha")
         return scores
     }
-
-
 }
 
 class ScoreAdapterInt(context: Context, resource: Int, scores: MutableList<Pair<String, Int>>) : ArrayAdapter<Pair<String, Int>>(context, resource, scores) {
@@ -255,9 +244,8 @@ class ScoreAdapterLong(context: Context, resource: Int, scores: MutableList<Pair
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.score_listview, parent, false)
         val score = getItem(position)
         view.findViewById<TextView>(R.id.textview_pseudo).text = score?.first
-        //Log.i("game",game)
         when(game){
-            "Biscuit" -> view.findViewById<TextView>(R.id.textview_score).text = (score?.second?.div(1000)).toString()+","+ (score?.second?.rem(1000)) + "s"
+            "Biscuit" -> view.findViewById<TextView>(R.id.textview_score).text = (score?.second?.div(1000)).toString()+","+ (score?.second?.rem(1000)) + "  s"
             "Rope" -> view.findViewById<TextView>(R.id.textview_score).text = (((score?.second?.times(
                 10.0
             ))?.roundToInt() ?: 0) /10.0).toString() + " cm"
@@ -267,7 +255,6 @@ class ScoreAdapterLong(context: Context, resource: Int, scores: MutableList<Pair
             ))?.roundToInt() ?: 0) /100.0).toString() + " dB"
 
         }
-
         return view
     }
 }

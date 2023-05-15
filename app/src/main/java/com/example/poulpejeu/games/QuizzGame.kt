@@ -98,13 +98,11 @@ class QuizzGame : ComponentActivity() {
     private fun goToNextQuestion() {
         // Delay switching to the next question by 1 second for visual feedback
         window.decorView.postDelayed({
-            Log.i("question",currentQuestionIndex.toString())
             currentQuestionIndex++
             // Increment current question index
             // If all questions have been answered, show score and reset the quiz
             if (currentQuestionIndex == questions.size) {
                 showScore()
-                //resetQuiz()
             } else {
                 // Otherwise, show the next question
               setQuestion(questions[currentQuestionIndex])
@@ -126,7 +124,6 @@ class QuizzGame : ComponentActivity() {
 
             // Enregistrer le score dans les SharedPreferences sous forme de chaîne
             editor.putInt("lastscoreint", score)
-            //editor.putString("scoreQuiz","1,4,2,3,5")
             editor.apply()
             startActivity(intent)
         } else {
@@ -135,17 +132,4 @@ class QuizzGame : ComponentActivity() {
         }
         finish()
     }
-
-            fun resetQuiz() {
-            // Reset current question index and score
-            currentQuestionIndex = 0
-            score = 0
-
-            // Shuffle options for each question
-            questions.forEach { it.shuffleOptions() }
-
-            // Initialize first question
-            setQuestion(questions[currentQuestionIndex])
-        }
-
     }

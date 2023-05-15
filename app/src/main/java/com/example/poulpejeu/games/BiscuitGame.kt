@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.*
-import android.os.Bundle
-import android.os.CountDownTimer
-import android.os.Handler
+import android.os.*
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -70,17 +68,26 @@ class BiscuitGame: ComponentActivity() {
         chrono = findViewById(R.id.chrono)
         container = findViewById(R.id.container)
         countDownTimer = object : CountDownTimer(Long.MAX_VALUE, 10) {
+            private var startTime: Long = 0
+
             override fun onTick(millisUntilFinished: Long) {
-                timeElapsed += 10
-                val time = String.format("%02d:%02d.%02d",
-                    TimeUnit.MILLISECONDS.toMinutes(timeElapsed),
-                    TimeUnit.MILLISECONDS.toSeconds(timeElapsed) % 60,
-                    timeElapsed % 1000)
-                chrono.text = time
+                if (startTime == 0L) {
+                    startTime = SystemClock.elapsedRealtime()
+                } else {
+                    val elapsedMillis = SystemClock.elapsedRealtime() - startTime
+                    timeElapsed += elapsedMillis
+                    startTime += elapsedMillis
+                    val time = String.format("%02d:%02d.%02d",
+                        TimeUnit.MILLISECONDS.toMinutes(timeElapsed),
+                        TimeUnit.MILLISECONDS.toSeconds(timeElapsed) % 60,
+                        timeElapsed % 100)
+                    chrono.text = time
+                }
             }
 
             override fun onFinish() {}
         }
+
         initGame()
     }
 
@@ -125,6 +132,15 @@ class BiscuitGame: ComponentActivity() {
     }
 
     fun penalty() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+            // Vérifier si la vibration est supportée
+            if (vibrator.hasVibrator()) {
+                // Faire vibrer l'écran pendant 500 millisecondes
+                vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
+            }
+        }
         timeElapsed +=2000
     }
 
@@ -135,8 +151,6 @@ class BiscuitGame: ComponentActivity() {
         val score = (timeElapsed/1000).toString()+","+ (timeElapsed%1000) + "s"
         if(GameHandler.practiceMode) {
             val intent = Intent(this, PracticeResult::class.java)
-            intent.putExtra("score", score)
-            startActivity(intent)
             intent.putExtra("score", score)
             intent.putExtra("game","Biscuit")
             val prefs = getSharedPreferences("scores", MODE_PRIVATE)
